@@ -1,0 +1,33 @@
+.main {
+  height: 100%;
+  width: 100%;
+
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+}
+
+.backgroundCover {
+  height: 100%;
+  width: 100%;
+
+  z-index: -1;
+  position: fixed;
+  top: 0;
+  left: 0;
+
+  will-change: background-image;
+
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+
+  // 默认背景（如果动态设置失败时的后备）
+  background-image: var(--wallpaper-url, url(/assets/wallpapers/37-2.jpg));
+
+  :global(body.dark) & {
+    background-image: var(--wallpaper-url, url(/assets/wallpapers/37-1.jpg));
+  }
+
+  // 过渡效果
+  transition: background-image 0.3s ease-in-out;
+}
