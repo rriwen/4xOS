@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>任文倩 - 简历</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif;
+            background-color: #0d0d0d;
+            color: #e5e5e5;
+            line-height: 1.7;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            font-size: 14px;
+            font-weight: 400;
+            letter-spacing: 0.3px;
+        }
+
+        .container {
+            background-color: #0d0d0d;
+            border: 2px solid #4a4a4a;
+            padding: 30px;
+            box-shadow: 0 0 0 2px #0d0d0d;
+        }
+
+        .header {
+            border-bottom: 2px solid #4a4a4a;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            font-size: 24px;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 600;
+            color: #f0f0f0;
+        }
+
+        .contact-info {
+            font-size: 12px;
+            color: #b0b0b0;
+            margin-top: 10px;
+            font-weight: 400;
+        }
+
+        .contact-info span {
+            margin-right: 20px;
+        }
+
+        .section {
+            margin-bottom: 40px;
+            border-left: 1px solid #4a4a4a;
+            padding-left: 20px;
+        }
+
+        .section-title {
+            font-size: 18px;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #4a4a4a;
+            padding-bottom: 5px;
+            letter-spacing: 1px;
+            font-weight: 600;
+            color: #f0f0f0;
+        }
+
+        .intro {
+            background-color: #1a1a1a;
+            border: 1px solid #3a3a3a;
+            padding: 15px;
+            margin-bottom: 30px;
+            font-size: 13px;
+            line-height: 1.9;
+            font-weight: 400;
+            color: #d5d5d5;
+        }
+
+        .job-item, .project-item {
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px dashed #3a3a3a;
+        }
+
+        .job-item:last-child, .project-item:last-child {
+            border-bottom: none;
+        }
+
+        .job-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: #f0f0f0;
+        }
+
+        .company {
+            color: #b8b8b8;
+            font-size: 13px;
+            margin-bottom: 5px;
+            font-weight: 400;
+        }
+
+        .period {
+            color: #888888;
+            font-size: 12px;
+            font-style: italic;
+            margin-bottom: 15px;
+            font-weight: 400;
+        }
+
+        .description {
+            font-size: 13px;
+            line-height: 1.9;
+            color: #d0d0d0;
+            font-weight: 400;
+        }
+
+        ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        li {
+            margin-bottom: 12px;
+            padding-left: 20px;
+            position: relative;
+            font-size: 13px;
+            line-height: 1.8;
+            font-weight: 400;
+            color: #d5d5d5;
+        }
+
+        li:before {
+            content: "> ";
+            position: absolute;
+            left: 0;
+            color: #6a6a6a;
+            font-weight: 500;
+        }
+
+        .highlight {
+            color: #f0f0f0;
+            font-weight: 500;
+        }
+
+        .education {
+            background-color: #1a1a1a;
+            border: 1px solid #3a3a3a;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+
+        .education-title {
+            font-size: 15px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #f0f0f0;
+        }
+
+        .education-detail {
+            font-size: 12px;
+            color: #b8b8b8;
+            line-height: 1.9;
+            font-weight: 400;
+        }
+
+        .skills {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin-top: 15px;
+        }
+
+        .skill-item {
+            background-color: #1a1a1a;
+            border: 1px solid #3a3a3a;
+            padding: 20px;
+            font-size: 13px;
+            font-weight: 400;
+            color: #d5d5d5;
+            line-height: 1.8;
+        }
+
+        .skill-title {
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #f0f0f0;
+            font-size: 15px;
+            border-bottom: 1px solid #3a3a3a;
+            padding-bottom: 8px;
+        }
+
+        .skill-item ul {
+            margin-top: 10px;
+        }
+
+        .skill-item li {
+            margin-bottom: 10px;
+            padding-left: 20px;
+            font-size: 12px;
+        }
+
+        .skill-item li:before {
+            content: "- ";
+            color: #6a6a6a;
+        }
+
+        .skill-item .skill-subtitle {
+            font-weight: 500;
+            color: #e5e5e5;
+            display: inline;
+        }
+
+        .footer {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 2px solid #4a4a4a;
+            text-align: center;
+            font-size: 12px;
+            color: #888888;
+            font-weight: 400;
+        }
+
+        .separator {
+            border-top: 1px solid #3a3a3a;
+            margin: 20px 0;
+        }
+
+        /* 主题切换按钮 */
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: #1a1a1a;
+            border: 1px solid #4a4a4a;
+            color: #e5e5e5;
+            padding: 8px 16px;
+            cursor: pointer;
+            font-size: 12px;
+            font-family: inherit;
+            border-radius: 4px;
+            z-index: 1000;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .theme-toggle:hover {
+            background-color: #2a2a2a;
+            border-color: #6a6a6a;
+        }
+
+        /* Light 模式样式 */
+        body.light-mode {
+            background-color: #f5f5f5;
+            color: #1a1a1a;
+        }
+
+        body.light-mode .container {
+            background-color: #ffffff;
+            border: 2px solid #d0d0d0;
+            box-shadow: 0 0 0 2px #ffffff;
+        }
+
+        body.light-mode .header {
+            border-bottom: 2px solid #d0d0d0;
+        }
+
+        body.light-mode h1 {
+            color: #0a0a0a;
+        }
+
+        body.light-mode .contact-info {
+            color: #4a4a4a;
+        }
+
+        body.light-mode .section {
+            border-left: 1px solid #d0d0d0;
+        }
+
+        body.light-mode .section-title {
+            border-bottom: 1px solid #d0d0d0;
+            color: #0a0a0a;
+        }
+
+        body.light-mode .intro {
+            background-color: #f8f8f8;
+            border: 1px solid #d0d0d0;
+            color: #2a2a2a;
+        }
+
+        body.light-mode .job-item,
+        body.light-mode .project-item {
+            border-bottom: 1px dashed #d0d0d0;
+        }
+
+        body.light-mode .job-title {
+            color: #0a0a0a;
+        }
+
+        body.light-mode .company {
+            color: #4a4a4a;
+        }
+
+        body.light-mode .description {
+            color: #2a2a2a;
+        }
+
+        body.light-mode li {
+            color: #2a2a2a;
+        }
+
+        body.light-mode li:before {
+            color: #6a6a6a;
+        }
+
+        body.light-mode .highlight {
+            color: #0a0a0a;
+        }
+
+        body.light-mode .education {
+            background-color: #f8f8f8;
+            border: 1px solid #d0d0d0;
+        }
+
+        body.light-mode .education-title {
+            color: #0a0a0a;
+        }
+
+        body.light-mode .education-detail {
+            color: #4a4a4a;
+        }
+
+        body.light-mode .skill-item {
+            background-color: #f8f8f8;
+            border: 1px solid #d0d0d0;
+            color: #2a2a2a;
+        }
+
+        body.light-mode .skill-title {
+            color: #0a0a0a;
+            border-bottom: 1px solid #d0d0d0;
+        }
+
+        body.light-mode .skill-item .skill-subtitle {
+            color: #1a1a1a;
+        }
+
+        body.light-mode .footer {
+            border-top: 2px solid #d0d0d0;
+            color: #6a6a6a;
+        }
+
+        body.light-mode .theme-toggle {
+            background-color: #ffffff;
+            border: 1px solid #d0d0d0;
+            color: #1a1a1a;
+        }
+
+        body.light-mode .theme-toggle:hover {
+            background-color: #f0f0f0;
+            border-color: #a0a0a0;
+        }
+
+        @media print {
+            body {
+                background-color: #ffffff;
+                color: #000000;
+            }
+            .container {
+                border: 2px solid #000000;
+            }
+            .section {
+                border-left: 1px solid #000000;
+            }
+            .intro, .education, .skill-item {
+                background-color: #f5f5f5;
+                border: 1px solid #000000;
+            }
+        }
+    </style>
+</head>
+<body>
+    <button class="theme-toggle" id="themeToggle" aria-label="切换主题">🌓 切换主题</button>
+    <div class="container">
+        <div class="header">
+            <h1>任文倩</h1>
+            <div class="contact-info">
+                <span>产品设计师</span>
+                <span>浙江杭州</span>
+                <span>18362976211</span>
+                <span>rriwen@gmail.com</span>
+            </div>
+        </div>
+
+        <div class="intro">
+            · <span class="highlight">复合型AI产品能力</span>：兼具深度体验设计思维与AI产品策略视野，擅长将技术可行性转化为直观用户价值，主导AI产品从0到1孵化（如ChatBI）<br>
+            · <span class="highlight">数据与商业驱动</span>：构建"数据+AI+洞察"混合分析体系，决策直接驱动关键指标提升（如用户满意度+30%、自助率提升至75%、技术支持成本-20%）<br>
+            · <span class="highlight">全链路AI提效实践</span>：善用AI工具（如Cursor）及自研插件加速原型验证与产品迭代，具备通过技术创新优化研发流程的工程化思维
+        </div>
+
+        <div class="section">
+            <div class="section-title">工作经历</div>
+            
+            <div class="job-item">
+                <div class="job-title">高级体验设计师</div>
+                <div class="company">蚂蚁集团 · OceanBase</div>
+                <div class="period">2021/07 - 2026/01</div>
+                <div class="description">
+                    负责数据开发产品矩阵的全局体验设计与 AI 创新产品的探索孵化，擅长运用AI工具与技术思维提升产品定义、验证与迭代的全链路效率
+                </div>
+                <ul>
+                    <li><span class="highlight">AI 产品策略和敏捷孵化</span>：主导 Text2SQL/ChatBI 产品从0到1的构建。通过市场和技术趋势分析定义产品机会，并运用Figma+Cursor快速构建可交互原型，将概念验证周期缩短50%；协调开发团队，将技术方案转化为直观的产品设计方案；参与构建业务测试集，推动核心场景准确率在POC阶段达到80%，验证商业化可行性。</li>
+                    <li><span class="highlight">AI 驱动的用户研究与体验洞察</span>：构建定量数据+定性洞察+AI分析的用户度量体系。利用AI + MCP +skills 分析行为埋点与问卷数据，生成深度洞察报告，精准定位体验瓶颈；主导多项体验专项优化，推动产品核心用户满意度提升30%，助力用户规模实现翻倍增长。</li>
+                    <li><span class="highlight">核心流程重构与商业影响</span>：通过系统化分析用户行为数据，定义以"提升自助率"为目标的优化方案，推动3项关键优化上线后，核心任务自助率从低位提升至75%以上，并有效降低20%的客户技术支持成本。</li>
+                    <li><span class="highlight">交互设计和验证闭环</span>：建立"高保真原型+设计冲刺"的敏捷验证方式，聚焦核心指标快速迭代方案；将 AI 能力融入用户测试与数据分析环节，提升验证深度与效率，推动整体产品迭代效率提升30%。</li>
+                    <li><span class="highlight">技术提效与工具创新</span>：主导内部设计工具升级、开发 AI 设计提效插件、搭建设计系统资产系统，通过自动化处理（如还原度验收）等重复性工作，使设计团队基础效能提升约15%，为团队持续创新构建高效基础设施。</li>
+                </ul>
+            </div>
+
+            <div class="job-item">
+                <div class="job-title">产品设计师</div>
+                <div class="company">华东勘测设计研究院子公司</div>
+                <div class="period">2019/09 - 2021/06</div>
+                <ul>
+                    <li>主导云南省级"智慧征迁平台"从0到1的全过程产品设计，深入一线进行需求挖掘与业务分析，协同多方（政府、业务专家、供应商）推动产品交付和落地。</li>
+                    <li>推动产品在 6 个月内完成上线，实现政府核心业务全流程数字化，将平均业务处理周期缩短了 50%。</li>
+                    <li>针对复杂的勘测和征迁业务规则，设计并落地了模块化、可配置的产品解决方案，显著提升政府工作人员的处理效率与数据准确性。</li>
+                    <li>建立并推行跨团队产品协作流程与设计规范，协调外部供应商资源，保障大型政企项目的交付质量与迭代效率。</li>
+                </ul>
+            </div>
+
+            <div class="job-item">
+                <div class="job-title">产品设计师</div>
+                <div class="company">上海浦槐科技</div>
+                <div class="period">2016/09 - 2019/04</div>
+                <ul>
+                    <li>负责 VR 全景图片社区 VR 端、PC端、App端全链路设计，关注VR行业趋势，通过A/B测试、问卷、可用性测试等方法研究用户行为，结合竞品调研挖掘VR设计创新点。</li>
+                    <li>持续运营推广社群，实现产品访问量达20w人/100w次，达到VR产品应用榜TOP5，并多次被Oculus、Daydream、小米等平台推荐。</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-title">教育经历</div>
+            <div class="education">
+                <div class="education-title">南京邮电大学 · 软件工程本科 (2012 - 2016)</div>
+                <div class="education-detail">
+                    新媒体社团副主席，负责官方新媒体平台内容策划、物料设计与发布；<br>
+                    大学生创业计划竞赛（全国银奖、江苏省银奖），SmileGate创意大赛（Logo设计组二等奖）
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-title">项目经历</div>
+            
+            <div class="project-item">
+                <div class="job-title">ChatBI 智能数据分析</div>
+                <div class="period">客户企业内部的业务开发人员数据分析诉求强烈，市场上同时存在通过AI降低数据分析门槛的商业潜力</div>
+                <ul>
+                    <li><span class="highlight">产品规划立项</span>：洞察市场空白，基于现有 Text2SQL 技术能力，成功推动ChatBI产品立项；全程参与从技术可行性验证、产品设计优化到商业化探索的完整路线图规划。</li>
+                    <li><span class="highlight">技术方案共建</span>：项目初期协同技术团队优化提示词工程，效果未达业务标准；后通过深入行业调研，引入"指标层"作为语义理解中介，将AI分析准确率从 25% 提升至可用水平 80%。</li>
+                    <li><span class="highlight">体验设计创新</span>：针对 AI 黑盒问题，主导设计 AI 执行过程可视化和分支管理的创新交互设计，帮助用户理解和信任AI的生成逻辑，并通过可用性测试验证方案设计；</li>
+                    <li><span class="highlight">阶段性成果</span>：准确率提升至80%，达到可用标准；创新交互方案内部满意度达6.2分（满分7分），所形成的AI产品设计模式被沉淀并复用于公司其他AI产品线。</li>
+                </ul>
+            </div>
+
+            <div class="project-item">
+                <div class="job-title">数据开发工具矩阵</div>
+                <div class="period">面对多个独立编辑器存在的交互不一致、操作繁琐、视觉陈旧问题，需在不中断业务前提下，系统性提升体验并构建可持续的设计体系。</div>
+                <ul>
+                    <li><span class="highlight">体验诊断与策略制定</span>：通过多轮开发者可用性测试与深度访谈，精准识别数据表格操作、暗黑模式适配、任务流编排等核心体验短板，制定以"提升开发效率与平台粘性"为目标的重构路线图。</li>
+                    <li><span class="highlight">设计标准化与方案实施</span>：主导编辑器体验的标准化重构，统一全局布局与交互模式，深度优化数据表、任务流、仪表盘等核心模块的交互设计，并完成专业级暗黑模式的体系化搭建。</li>
+                    <li><span class="highlight">数据验证与持续迭代</span>：结合用户反馈、可用性测试及产品埋点数据，形成设计验证闭环，确保持续提升工具的专业性与易用性。</li>
+                    <li><span class="highlight">阶段性成果</span>：产品满意度从4.8分大幅提升至6.2分（满分7分），驱动用户数实现翻倍增长；建立的标准化设计资产库，支撑新业务快速搭建，提升团队设计效率30%。</li>
+                </ul>
+            </div>
+
+            <div class="project-item">
+                <div class="job-title">数据库管控平台</div>
+                <div class="period">安装部署、数据迁移等多个运维工具核心链路操作复杂，导致用户自助完成率低至 15%，技术支持成本居高不下。</div>
+                <ul>
+                    <li><span class="highlight">问题诊断与机会点挖掘</span>：综合运用问卷、访谈与埋点数据分析，绘制关键运维场景的用户体验地图，精准定位信息架构混乱与操作指引缺失等核心瓶颈。</li>
+                    <li><span class="highlight">敏捷设计与流程重构</span>：采用设计冲刺方法，在一周内协同团队快速产出重构后的核心任务流程与高保真交互原型，并立即组织用户测试验证。</li>
+                    <li><span class="highlight">协同推动与效果闭环</span>：紧密协同产品与研发团队，将用户测试通过的方案拆解迭代、推动上线，并通过细化埋点持续监控数据表现，驱动持续优化。</li>
+                    <li><span class="highlight">阶段性成果</span>：核心任务链路的用户自助完成率提升至75%以上，有效降低了约20%的客户技术支持成本。</li>
+                </ul>
+            </div>
+
+            <div class="project-item">
+                <div class="job-title">数字征迁平台</div>
+                <div class="period">运打破移民行业传统线下模式，实现移民搬迁工作的流程信息化、数据采集智能化、操作终端化</div>
+                <ul>
+                    <li><span class="highlight">贴身访谈和调研</span>：通过焦点小组访谈、影子观察等方法挖掘用户使用多端平台的痛点，</li>
+                    <li><span class="highlight">产品流程优化</span>：根据政府特点和模式，梳理用户行为路径，提出优化系统流程的交互发难并洞察交互创新点，实现多端(PC+PAD+测绘设备)交互</li>
+                    <li><span class="highlight">产品重构与流程优化</span>：采用设计冲刺的敏捷方法，一周内与团队协作，快速重构核心任务流程与交互原型，并完成用户测试。</li>
+                    <li><span class="highlight">团队协作与推动落地</span>：组织协调设计团队成员，共同完成项目计划，同时沉淀设计组件库，保证其他供应商输出的一致性和标准化</li>
+                    <li><span class="highlight">项目成果</span>：该平台已落地浙江省、雄安新区、云南澜沧江、昭通市等多个大型搬迁安置项目</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-title">专业技能</div>
+            <div class="skills">
+                <div class="skill-item">
+                    <div class="skill-title">AI 产品与策略</div>
+                    <ul>
+                        <li><span class="skill-subtitle">产品规划</span>：擅长AI场景挖掘、需求定义与MVP设计，具备从0到1的AI产品孵化及商业化路径规划经验。</li>
+                        <li><span class="skill-subtitle">技术协同</span>：熟悉机器学习与自然语言处理（NLP）应用场景，具备与算法团队协作定义模型优化目标（如准确率、响应时延）及构建业务测试集的能力。</li>
+                        <li><span class="skill-subtitle">Prompt工程与评估</span>：具备Prompt优化与AI能力评估的实践经验，能通过引入语义层、优化测试集等方式系统性提升AI任务可用性。</li>
+                    </ul>
+                </div>
+                <div class="skill-item">
+                    <div class="skill-title">数据驱动与商业化分析</div>
+                    <ul>
+                        <li><span class="skill-subtitle">洞察分析</span>：能通过A/B测试、用户行为埋点分析及满意度调研，构建混合研究体系，驱动产品优化与迭代决策。</li>
+                        <li><span class="skill-subtitle">商业洞察</span>：擅长将用户体验指标（如自助率、任务时长）与商业成果（如成本降低、用户增长）强关联，量化设计价值。</li>
+                    </ul>
+                </div>
+                <div class="skill-item">
+                    <div class="skill-title">工具与效能</div>
+                    <ul>
+                        <li><span class="skill-subtitle">产品与设计工具</span>：精通Figma、Sketch、Axure，用于高保真原型、设计系统管理及团队协同。</li>
+                        <li><span class="skill-subtitle">AI与开发工具</span>：熟练使用Cursor、Vercel等辅助原型开发与验证；具备SQL基础数据分析能力。</li>
+                        <li><span class="skill-subtitle">提效实践</span>：拥有内部工具链建设经验，能通过开发AI提效插件、自动化流程提升团队产能。</li>
+                    </ul>
+                </div>
+                <div class="skill-item">
+                    <div class="skill-title">用户体验与设计创新</div>
+                    <ul>
+                        <li><span class="skill-subtitle">系统设计</span>：精通用户旅程地图、交互原型、可用性测试及设计系统构建，能主导复杂B端产品的体验重构与标准化。</li>
+                        <li><span class="skill-subtitle">AI体验设计</span>：专注于解决AI产品的"黑盒"信任问题，擅长设计可解释的交互（如过程可视化、分支管理）以提升用户理解与采纳度。</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <div>欢迎随时联系我！</div>
+            <div style="margin-top: 10px;">
+                手机/微信：18362976211  |  邮箱：rriwen@gmail.com
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 主题切换功能
+        (function() {
+            const themeToggle = document.getElementById('themeToggle');
+            const body = document.body;
+            
+            // 从localStorage读取保存的主题偏好，默认为dark模式
+            const savedTheme = localStorage.getItem('theme') || 'dark';
+            
+            // 应用保存的主题
+            if (savedTheme === 'light') {
+                body.classList.add('light-mode');
+                themeToggle.textContent = '🌙 切换主题';
+            } else {
+                body.classList.remove('light-mode');
+                themeToggle.textContent = '☀️ 切换主题';
+            }
+            
+            // 切换主题
+            themeToggle.addEventListener('click', function() {
+                if (body.classList.contains('light-mode')) {
+                    // 切换到dark模式
+                    body.classList.remove('light-mode');
+                    localStorage.setItem('theme', 'dark');
+                    themeToggle.textContent = '☀️ 切换主题';
+                } else {
+                    // 切换到light模式
+                    body.classList.add('light-mode');
+                    localStorage.setItem('theme', 'light');
+                    themeToggle.textContent = '🌙 切换主题';
+                }
+            });
+        })();
+    </script>
+</body>
+</html>
