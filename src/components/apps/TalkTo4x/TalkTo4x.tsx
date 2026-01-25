@@ -17,29 +17,67 @@ interface Message {
  * 判断回答内容是否与简历相关
  */
 const isResumeRelated = (content: string): boolean => {
+  // 如果内容太短，不判断为简历相关
+  if (!content || content.trim().length < 10) {
+    return false;
+  }
+  
   const resumeKeywords = [
+    // 工作相关
     '工作经历',
     '工作经验',
     '工作',
-    '项目经验',
-    '项目',
-    '技能',
-    '专业技能',
-    '教育经历',
-    '教育',
-    '个人简介',
-    '简介',
-    '简历',
-    '经历',
     '公司',
     '职位',
     '职责',
     '成就',
     '成果',
+    // 项目相关
+    '项目经验',
+    '项目',
+    'chatbi',
+    'text2sql',
+    '数据开发',
+    '数据库管控',
+    '数字征迁',
+    // 技能相关
+    '技能',
+    '专业技能',
+    '擅长',
+    '精通',
+    '熟悉',
+    // 教育相关
+    '教育经历',
+    '教育',
+    '大学',
+    '学历',
+    // 个人相关
+    '个人简介',
+    '简介',
+    '简历',
+    '经历',
+    '背景',
+    // 具体公司和项目
+    '蚂蚁集团',
+    'oceanbase',
+    '华东勘测',
+    '浦槐科技',
+    '南京邮电',
   ];
   
   const lowerContent = content.toLowerCase();
-  return resumeKeywords.some((keyword) => lowerContent.includes(keyword.toLowerCase()));
+  // 检查是否包含关键词，但排除一些常见但无关的词
+  const hasKeyword = resumeKeywords.some((keyword) => lowerContent.includes(keyword.toLowerCase()));
+  
+  // 额外检查：如果内容包含"我"且包含工作/项目/技能相关词汇，也认为是简历相关
+  const hasPersonalReference = lowerContent.includes('我') && (
+    lowerContent.includes('工作') ||
+    lowerContent.includes('项目') ||
+    lowerContent.includes('技能') ||
+    lowerContent.includes('经历')
+  );
+  
+  return hasKeyword || hasPersonalReference;
 };
 
 const buildSystemPrompt = (resumeData: ResumeData | null): string => {
