@@ -4,19 +4,21 @@ import { defineConfig, loadEnv } from 'vite';
 import { existsSync } from 'fs';
 
 export default defineConfig(({ mode }) => {
-  // 安全地加载环境变量，即使 .env 文件不存在也不会报错
-  let env = {};
+  // 安全地加载环境变量，即使 .env 文件不存在或无法读取也不会报错
+  let env = process.env;
   try {
     // 只有在 .env 文件存在时才尝试加载
     if (existsSync('.env') || existsSync('.env.local')) {
-      env = loadEnv(mode, process.cwd(), '');
-    } else {
-      // 如果文件不存在，从 process.env 中读取（Vercel 等平台会设置这些）
-      env = process.env;
+      try {
+        env = loadEnv(mode, process.cwd(), '');
+      } catch (loadError) {
+        // 如果 loadEnv 失败（例如权限问题），使用 process.env
+        console.warn('无法加载 .env 文件，使用 process.env');
+        env = process.env;
+      }
     }
   } catch (error) {
-    // 如果加载失败，使用 process.env
-    console.warn('无法加载 .env 文件，使用 process.env:', error.message);
+    // 如果检查文件存在性失败，使用 process.env
     env = process.env;
   }
   

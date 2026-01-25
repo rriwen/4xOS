@@ -34,7 +34,7 @@ export const TrafficLights = ({
 
   const closeApp = () => {
     // 关闭窗口时清理 z-index 和最小化状态
-    setWindowZIndices((prev) => {
+    setWindowZIndices((prev: Partial<Record<AppID, number>>) => {
       const newIndices = { ...prev };
       delete newIndices[appID];
       return newIndices;

@@ -28,10 +28,10 @@ export const activeAppZIndexStore = atom(98);
  * Store to track z-index for each window
  * Each window gets a base z-index, active window gets the highest
  */
-export const windowZIndexStore = atom<Record<AppID, number>>({});
+export const windowZIndexStore = atom<Partial<Record<AppID, number>>>({});
 
 /**
  * Store to track minimized state for each window
  * true = minimized, false/undefined = not minimized
  */
-export const minimizedAppsStore = atom<Record<AppID, boolean>>({});
+export const minimizedAppsStore = atom<Partial<Record<AppID, boolean>>>({});
