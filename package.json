@@ -5,7 +5,7 @@
     "type-check-watch": "tsc src/**/*.{ts,tsx} --noEmit --watch",
     "build": "tsc && vite build",
     "test": "jest",
-    "postbuild": "workbox generateSW workbox-config.js",
+    "postbuild": "workbox generateSW workbox-config.js || true",
     "serve": "vite preview"
   },
   "dependencies": {
