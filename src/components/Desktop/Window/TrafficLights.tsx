@@ -34,7 +34,7 @@ export const TrafficLights = ({
 
   const closeApp = () => {
     // 关闭窗口时清理 z-index 和最小化状态
-    setWindowZIndices((prev) => {
+    setWindowZIndices((prev: Partial<Record<AppID, number>>) => {
       const newIndices = { ...prev };
       delete newIndices[appID];
       return newIndices;
@@ -68,7 +68,7 @@ export const TrafficLights = ({
   };
 
   // 点击 TrafficLights 区域时激活窗口
-  const handleContainerClick = (e: React.MouseEvent) => {
+  const handleContainerClick = (e: any) => {
     // 如果点击的不是按钮本身，则激活窗口
     const target = e.target as HTMLElement;
     if (target === e.currentTarget || target.closest('button') === null) {
