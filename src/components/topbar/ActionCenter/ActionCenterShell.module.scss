@@ -1,3 +1,5 @@
+@import '../../../design-tokens/tokens';
+
 .container {
   --border-size: 0;
 
@@ -5,22 +7,22 @@
 
   width: 19.5rem;
 
-  padding: 0.75rem;
+  padding: $spacing-5;
 
   position: relative;
 
   user-select: none;
 
-  background-color: hsla(var(--app-color-light-hsl), 0.3);
-  backdrop-filter: blur(12px);
+  background-color: hsla(var(--app-color-light-hsl), $opacity-30);
+  backdrop-filter: blur($blur-lg);
 
-  border-radius: 1rem;
+  border-radius: var(--token-radius-xl);
 
-  box-shadow: hsla(0, 0%, 0%, 0.3) 0px 0px 11px 0px,
-    inset 0 0 0 var(--border-size) hsla(var(--app-color-dark-hsl), 0.3),
-    0 0 0 var(--border-size) hsla(var(--app-color-light-hsl), 0.3);
+  box-shadow: hsla(0, 0%, 0%, $opacity-30) 0px 0px 11px 0px,
+    inset 0 0 0 var(--border-size) hsla(var(--app-color-dark-hsl), $opacity-30),
+    0 0 0 var(--border-size) hsla(var(--app-color-light-hsl), $opacity-30);
 
   :global(body.dark) & {
-    --border-size: 0.5px;
+    --border-size: $border-width-thin;
   }
 }

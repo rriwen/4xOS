@@ -1,0 +1,296 @@
+.container {
+  height: 100%;
+  width: 100%;
+  background-color: var(--app-color-light);
+  border-radius: inherit;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  font-family: var(--app-font-family) !important;
+  position: relative;
+}
+
+.tabsBar {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  padding: 0.5rem;
+  padding-left: 0.5rem; // 移除左侧 padding，因为现在在信号灯下方
+  padding-right: 0.5rem;
+  padding-top: 2.5rem; // 为信号灯留出空间（信号灯高度约 0.8rem + gap + padding）
+  padding-bottom: 0;
+  background: hsla(var(--app-color-light-hsl), 0.95);
+  border-bottom: 1px solid hsla(var(--app-color-dark-hsl), 0.1);
+  overflow-x: auto;
+  overflow-y: hidden;
+  flex-shrink: 0;
+  z-index: 1;
+  cursor: grab; // 标签页栏空白区域可拖拽
+  scrollbar-width: thin;
+  scrollbar-color: hsla(var(--app-color-dark-hsl), 0.2) transparent;
+
+  &:active {
+    cursor: grabbing;
+  }
+
+  &::-webkit-scrollbar {
+    height: 4px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: hsla(var(--app-color-dark-hsl), 0.2);
+    border-radius: 2px;
+
+    :global(body.dark) & {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    &:hover {
+      background: hsla(var(--app-color-dark-hsl), 0.3);
+
+      :global(body.dark) & {
+        background: rgba(255, 255, 255, 0.3);
+      }
+    }
+  }
+
+  :global(body.dark) & {
+    background: rgba(13, 13, 13, 0.95);
+    border-bottom-color: rgba(255, 255, 255, 0.1);
+  }
+}
+
+.tab {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  padding-right: 0.5rem;
+  min-width: 120px;
+  max-width: 240px;
+  // 未选中态：无背景，无边框
+  background: transparent;
+  border: none;
+  border-radius: 0.5rem 0.5rem 0 0;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+  user-select: none;
+  margin-right: 0.25rem;
+  pointer-events: auto; // 确保标签页可以点击，不受父元素 cursor: grab 影响
+
+  // hover态：轻微背景色
+  &:hover:not(.activeTab) {
+    background: hsla(var(--app-color-dark-hsl), 0.05);
+    transform: translateY(-1px); // 轻微上移，增加交互感
+  }
+
+  :global(body.dark) & {
+    // 未选中态（暗色模式）
+    background: transparent;
+
+    // hover态（暗色模式）
+    &:hover:not(.activeTab) {
+      background: rgba(255, 255, 255, 0.05);
+    }
+  }
+}
+
+.activeTab {
+  // 选中态：灰色背景，无边框
+  background: rgba(128, 128, 128, 0.2);
+  border: none;
+  z-index: 2; // 确保在未选中标签页之上
+  transform: translateY(0); // 确保在正常位置
+
+  // 选中态的hover：保持选中样式
+  &:hover {
+    background: rgba(128, 128, 128, 0.25);
+  }
+
+  :global(body.dark) & {
+    // 选中态（暗色模式）
+    background: rgba(128, 128, 128, 0.3);
+
+    // 选中态的hover（暗色模式）
+    &:hover {
+      background: rgba(128, 128, 128, 0.35);
+    }
+  }
+}
+
+.tabTitle {
+  flex: 1;
+  font-size: 0.8125rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.2;
+  transition: color 0.2s ease;
+  // 未选中态的文字颜色（默认）
+  color: hsla(var(--app-color-dark-hsl), 0.65);
+
+  :global(body.dark) & {
+    color: rgba(255, 255, 255, 0.65);
+  }
+}
+
+// 选中态的标题样式
+.activeTab .tabTitle {
+  color: hsla(var(--app-color-dark-hsl), 0.9);
+  font-weight: 500;
+
+  :global(body.dark) & {
+    color: rgba(255, 255, 255, 0.95);
+  }
+}
+
+// hover态的文字颜色（未选中时）
+.tab:hover:not(.activeTab) .tabTitle {
+  color: hsla(var(--app-color-dark-hsl), 0.85);
+
+  :global(body.dark) & {
+    color: rgba(255, 255, 255, 0.85);
+  }
+}
+
+.closeButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  padding: 0;
+  margin: 0;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  color: hsla(var(--app-color-dark-hsl), 0.5);
+  font-size: 1.2rem;
+  line-height: 1;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  flex-shrink: 0;
+  pointer-events: auto; // 确保按钮可以接收点击事件
+  position: relative;
+  z-index: 10; // 确保按钮在标签页之上
+
+  &:hover {
+    background: hsla(var(--app-color-dark-hsl), 0.1);
+    color: hsla(var(--app-color-dark-hsl), 0.8);
+  }
+
+  &:active {
+    background: hsla(var(--app-color-dark-hsl), 0.2);
+  }
+
+  :global(body.dark) & {
+    color: rgba(255, 255, 255, 0.5);
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: rgba(255, 255, 255, 0.9);
+    }
+
+    &:active {
+      background: rgba(255, 255, 255, 0.2);
+    }
+  }
+}
+
+.content {
+  flex: 1;
+  width: 100%;
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  background-color: #000000;
+}
+
+.placeholderText {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 2rem;
+  font-weight: 500;
+  color: hsla(var(--app-color-dark-hsl), 0.4);
+  pointer-events: none;
+  z-index: 0;
+  user-select: none;
+
+  :global(body.dark) & {
+    color: rgba(255, 255, 255, 0.3);
+  }
+}
+
+.iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+  background: white;
+  flex: 1;
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+
+  :global(body.dark) & {
+    background: #0d0d0d;
+  }
+}
+
+.activeIframe {
+  display: block;
+}
+
+.comingSoon {
+  width: 100%;
+  height: 100%;
+  border: none;
+  background: white;
+  flex: 1;
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  align-items: center;
+  justify-content: center;
+
+  :global(body.dark) & {
+    background: #0d0d0d;
+  }
+}
+
+.comingSoonContent {
+  text-align: center;
+  padding: 2rem;
+}
+
+.comingSoonTitle {
+  font-size: 3rem;
+  font-weight: 600;
+  color: hsla(var(--app-color-dark-hsl), 0.9);
+  margin: 0 0 1rem 0;
+  letter-spacing: -0.02em;
+
+  :global(body.dark) & {
+    color: rgba(255, 255, 255, 0.9);
+  }
+}
+
+.comingSoonText {
+  font-size: 1.125rem;
+  color: hsla(var(--app-color-dark-hsl), 0.6);
+  margin: 0;
+
+  :global(body.dark) & {
+    color: rgba(255, 255, 255, 0.6);
+  }
+}

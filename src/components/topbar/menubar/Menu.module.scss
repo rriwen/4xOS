@@ -1,3 +1,5 @@
+@import '../../../design-tokens/tokens';
+
 .container {
   // Initial invisible border
   --additional-box-shadow: 0 0 0 0 white;
@@ -7,22 +9,22 @@
   min-width: 16rem;
   width: max-content;
 
-  padding: 0.5rem;
+  padding: $spacing-4;
 
   position: relative;
 
   user-select: none;
 
-  background-color: hsla(var(--app-color-light-hsl), 0.3);
-  backdrop-filter: blur(25px);
+  background-color: hsla(var(--app-color-light-hsl), $opacity-30);
+  backdrop-filter: blur($blur-3xl);
 
-  border-radius: 0.5rem;
+  border-radius: var(--token-radius-base);
 
-  box-shadow: hsla(0, 0%, 0%, 0.3) 0px 0px 11px 0px, var(--additional-box-shadow);
+  box-shadow: hsla(0, 0%, 0%, $opacity-30) 0px 0px 11px 0px, var(--additional-box-shadow);
 
   :global(body.dark) & {
-    --additional-box-shadow: inset 0 0 0 0.9px hsla(var(--app-color-dark-hsl), 0.3),
-      0 0 0 1.2px hsla(var(--app-color-light-hsl), 0.3);
+    --additional-box-shadow: var(--token-shadow-inner-md),
+      0 0 0 1.2px hsla(var(--app-color-light-hsl), $opacity-30);
   }
 }
 
@@ -34,21 +36,21 @@
 
   width: 100%;
 
-  padding: 0.2rem 0.4rem;
-  margin: 0.1rem;
+  padding: $spacing-1 $spacing-3;
+  margin: $spacing-1;
 
-  letter-spacing: 0.4px;
-  font-weight: 400 !important;
-  font-size: 0.9rem !important;
+  letter-spacing: var(--token-letter-spacing-wider);
+  font-weight: var(--token-font-weight-regular) !important;
+  font-size: var(--token-font-size-md) !important;
 
-  border-radius: 0.3rem;
+  border-radius: $radius-md;
 
   transition: none;
 
   color: hsla(var(--app-color-dark-hsl), var(--alpha));
 
   &.disabled {
-    --alpha: 0.5;
+    --alpha: $opacity-50;
   }
 
   &:not(.disabled) {
@@ -62,9 +64,9 @@
 
 .divider {
   width: 100%;
-  height: 0.2px;
+  height: $border-width-thin;
 
-  background-color: hsla(var(--app-color-dark-hsl), 0.2);
+  background-color: hsla(var(--app-color-dark-hsl), $opacity-20);
 
-  margin: 2px 0;
+  margin: $spacing-1 0;
 }

@@ -15,6 +15,12 @@ export type AppConfig = {
   dockBreaksBefore?: boolean;
 
   trafficLightsStyle?: React.CSSProperties;
+
+  /** Custom default position. If not provided, uses random offset position */
+  defaultPosition?: 'center' | { x: number; y: number };
+
+  /** Open window maximized by default */
+  openMaximized?: boolean;
 };
 
 export const createAppConfig = (et: AppConfig) => ({

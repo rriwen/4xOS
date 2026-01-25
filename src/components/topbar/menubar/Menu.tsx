@@ -17,14 +17,8 @@ export const Menu = ({ menu }: MenuProps) => {
   const [, setActiveMenu] = useAtom(activeMenuStore);
 
   const handleMenuItemClick = (key: string) => {
-    if (key === 'about-this-mac') {
-      setOpenApps((apps) => {
-        apps['about-system'] = true;
-        return apps;
-      });
-      setActiveApp('about-system');
-      setActiveMenu('');
-    }
+    // Close menu after item click
+    setActiveMenu('');
   };
 
   return (

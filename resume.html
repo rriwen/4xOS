@@ -22,6 +22,8 @@
             font-size: 14px;
             font-weight: 400;
             letter-spacing: 0.3px;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
         }
 
         .container {
@@ -29,6 +31,8 @@
             border: 2px solid #4a4a4a;
             padding: 30px;
             box-shadow: 0 0 0 2px #0d0d0d;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
         }
 
         .header {
@@ -368,6 +372,160 @@
         body.light-mode .theme-toggle:hover {
             background-color: #f0f0f0;
             border-color: #a0a0a0;
+        }
+
+        /* 移动端响应式设计 */
+        @media screen and (max-width: 768px) {
+            body {
+                padding: 10px;
+                font-size: 13px;
+            }
+
+            .container {
+                padding: 20px 15px;
+                border-width: 1px;
+            }
+
+            .theme-toggle {
+                top: 10px;
+                right: 10px;
+                padding: 6px 12px;
+                font-size: 11px;
+            }
+
+            h1 {
+                font-size: 20px;
+                letter-spacing: 1px;
+            }
+
+            .contact-info {
+                font-size: 11px;
+                display: flex;
+                flex-direction: column;
+                gap: 5px;
+            }
+
+            .contact-info span {
+                margin-right: 0;
+            }
+
+            .section {
+                margin-bottom: 30px;
+                padding-left: 15px;
+            }
+
+            .section-title {
+                font-size: 16px;
+                margin-bottom: 15px;
+            }
+
+            .intro {
+                padding: 12px;
+                font-size: 12px;
+                line-height: 1.8;
+            }
+
+            .job-title {
+                font-size: 15px;
+            }
+
+            .company {
+                font-size: 12px;
+            }
+
+            .period {
+                font-size: 11px;
+            }
+
+            .description {
+                font-size: 12px;
+            }
+
+            li {
+                font-size: 12px;
+                line-height: 1.7;
+                margin-bottom: 10px;
+            }
+
+            .skills {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+
+            .skill-item {
+                padding: 15px;
+                font-size: 12px;
+            }
+
+            .skill-title {
+                font-size: 14px;
+                margin-bottom: 12px;
+            }
+
+            .skill-item li {
+                font-size: 11px;
+                margin-bottom: 8px;
+            }
+
+            .education {
+                padding: 12px;
+            }
+
+            .education-title {
+                font-size: 14px;
+            }
+
+            .education-detail {
+                font-size: 11px;
+            }
+
+            .footer {
+                font-size: 11px;
+                padding-top: 15px;
+            }
+
+            .job-item,
+            .project-item {
+                margin-bottom: 25px;
+                padding-bottom: 15px;
+            }
+        }
+
+        @media screen and (max-width: 480px) {
+            body {
+                padding: 8px;
+                font-size: 12px;
+            }
+
+            .container {
+                padding: 15px 10px;
+            }
+
+            h1 {
+                font-size: 18px;
+            }
+
+            .section-title {
+                font-size: 15px;
+            }
+
+            .intro {
+                padding: 10px;
+                font-size: 11px;
+            }
+
+            .job-title {
+                font-size: 14px;
+            }
+
+            .skill-item {
+                padding: 12px;
+            }
+
+            .theme-toggle {
+                padding: 5px 10px;
+                font-size: 10px;
+            }
         }
 
         @media print {

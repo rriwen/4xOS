@@ -12,12 +12,15 @@ export const useContextMenu = <T extends HTMLElement>(outerRef: RefObject<T>) =>
 
     if (!outerRef.current?.contains(event.target as HTMLElement)) return setIsMenuVisible(false);
 
-    let x = event.pageX;
-    let y = event.pageY;
+    // 使用 fixed 定位，直接使用视口坐标
+    let x = event.clientX;
+    let y = event.clientY;
 
     // Open to other side if rest of space is too small
-    if (window.innerWidth - x < 250) x -= 250;
-    if (window.innerHeight - y < 300) y -= 250;
+    const menuWidth = 250;
+    const menuHeight = 300;
+    if (window.innerWidth - x < menuWidth) x -= menuWidth;
+    if (window.innerHeight - y < menuHeight) y -= menuHeight;
 
     setXPos(`${x}px`);
     setYPos(`${y}px`);

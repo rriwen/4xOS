@@ -5,7 +5,12 @@ import { useImmerAtom } from 'jotai/immer';
 import { RefObject } from 'preact';
 import { useRef, useState } from 'preact/hooks';
 import { AppConfig } from '__/helpers/create-app-config';
-import { activeAppStore, AppID, openAppsStore } from '__/stores/apps.store';
+import {
+  activeAppStore,
+  AppID,
+  minimizedAppsStore,
+  openAppsStore,
+} from '__/stores/apps.store';
 import css from './DockItem.module.scss';
 
 type DockItemProps = AppConfig & {
@@ -25,6 +30,7 @@ export function DockItem({
 }: DockItemProps) {
   const [, setOpenApps] = useImmerAtom(openAppsStore);
   const [, setActiveApp] = useAtom(activeAppStore);
+  const [, setMinimizedApps] = useImmerAtom(minimizedAppsStore);
   const [animateObj, setAnimateObj] = useState({ translateY: ['0%', '0%', '0%'] });
 
   const imgRef = useRef<HTMLImageElement>();
@@ -34,10 +40,20 @@ export function DockItem({
   function openApp(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
     if (!shouldOpenWindow) return void externalAction?.(e);
 
+    // 如果窗口已经打开但被最小化，则恢复它
+    setMinimizedApps((minimized) => {
+      if (minimized[appID]) {
+        minimized[appID] = false;
+      }
+      return minimized;
+    });
+
+    // 打开应用
     setOpenApps((apps) => {
       apps[appID] = true;
       return apps;
     });
+    // 激活应用
     setActiveApp(appID);
   }
 

@@ -7,10 +7,6 @@ export const contextMenuConfig = {
     "get-info": {
       title: "Get Info",
     },
-    "change-desktop-bg": {
-      title: "Change Desktop Background",
-      breakAfter: true,
-    },
     "use-stacks": {
       title: "Use Stacks"
     },

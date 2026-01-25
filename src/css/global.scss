@@ -1,5 +1,6 @@
 @import './reset';
 @import './theme';
+@import '../design-tokens/tokens';
 
 html,
 body {
@@ -10,6 +11,8 @@ body {
   cursor: var(--app-cursor-default), auto;
 
   font-family: var(--app-font-family);
+  font-size: var(--token-font-size-base);
+  line-height: var(--token-line-height-normal);
 
   overflow: hidden;
 
@@ -20,7 +23,7 @@ body {
 * {
   box-sizing: border-box;
 
-  transition: background-color 150ms ease-in, background 150ms ease-in;
+  transition: $transition-colors;
 }
 
 #root {

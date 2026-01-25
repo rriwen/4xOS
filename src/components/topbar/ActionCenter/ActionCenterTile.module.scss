@@ -1,10 +1,12 @@
+@import '../../../design-tokens/tokens';
+
 .container {
   display: flex;
-  gap: 0.4rem;
+  gap: $spacing-3;
   align-items: center;
 
   font-size: 0.85rem;
-  font-weight: 600;
+  font-weight: var(--token-font-weight-semibold);
   color: var(--app-color-dark);
 
   grid-row: var(--row-start) / span var(--row-end);

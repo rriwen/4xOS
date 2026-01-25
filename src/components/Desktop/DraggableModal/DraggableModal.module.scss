@@ -1,0 +1,196 @@
+@import '../../../design-tokens/tokens';
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: var(--token-z-index-modal);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  background-color: rgba(0, 0, 0, $opacity-40);
+  backdrop-filter: blur($blur-md);
+
+  // 点击遮罩层关闭弹窗的动画
+  animation: fadeIn $transition-base $ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.modal {
+  position: relative;
+  width: 100%;
+  height: 100%;
+
+  display: flex;
+  flex-direction: column;
+
+  // 浅色模式：白色背景
+  background-color: var(--app-color-light);
+  
+  // 深色模式：深色背景
+  :global(body.dark) & {
+    background-color: var(--app-color-dark);
+  }
+
+  // 使用设计令牌的圆角
+  border-radius: var(--token-radius-lg);
+  
+  // 使用设计令牌的阴影
+  box-shadow: var(--token-shadow-xl);
+
+  :global(body.dark) & {
+    box-shadow: var(--token-shadow-inner-md),
+      var(--token-shadow-dark-xl);
+  }
+
+  // 平滑过渡
+  transition: $transition-colors;
+
+  // 文本颜色适配
+  color: var(--app-color-light-contrast);
+  
+  :global(body.dark) & {
+    color: var(--app-color-dark-contrast);
+  }
+
+  // 防止内容溢出
+  overflow: hidden;
+
+  // 使用设计令牌的字体
+  font-family: var(--app-font-family);
+  font-size: var(--token-font-size-base);
+  line-height: var(--token-line-height-normal);
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  
+  padding: $spacing-6 $spacing-8;
+  
+  border-bottom: $border-width-thin solid hsla(var(--app-color-dark-hsl), $opacity-10);
+  
+  :global(body.dark) & {
+    border-bottom-color: hsla(var(--app-color-light-hsl), $opacity-10);
+  }
+  
+  // 标题栏可拖拽
+  cursor: move;
+  
+  // 防止文本选择
+  user-select: none;
+  
+  // 拖拽时的视觉反馈
+  &:active {
+    cursor: grabbing;
+  }
+}
+
+.title {
+  margin: 0;
+  padding: 0;
+  
+  font-size: var(--token-font-size-2xl);
+  font-weight: var(--token-font-weight-semibold);
+  letter-spacing: var(--token-letter-spacing-wide);
+  
+  color: var(--app-color-light-contrast);
+  
+  :global(body.dark) & {
+    color: var(--app-color-dark-contrast);
+  }
+  
+  // 允许标题文本选择
+  user-select: text;
+  cursor: text;
+}
+
+.closeButton {
+  width: $spacing-8;
+  height: $spacing-8;
+  
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+  border: none;
+  background: transparent;
+  
+  font-size: var(--token-font-size-3xl);
+  line-height: 1;
+  color: hsla(var(--app-color-dark-hsl), $opacity-70);
+  
+  cursor: pointer;
+  
+  border-radius: var(--token-radius-sm);
+  
+  transition: $transition-colors;
+  
+  :global(body.dark) & {
+    color: hsla(var(--app-color-light-hsl), $opacity-70);
+  }
+  
+  &:hover {
+    background-color: hsla(var(--app-color-dark-hsl), $opacity-10);
+    color: hsla(var(--app-color-dark-hsl), $opacity-100);
+    
+    :global(body.dark) & {
+      background-color: hsla(var(--app-color-light-hsl), $opacity-10);
+      color: hsla(var(--app-color-light-hsl), $opacity-100);
+    }
+  }
+  
+  &:active {
+    transform: scale(0.95);
+  }
+  
+  // 关闭按钮不可拖拽
+  cursor: pointer;
+}
+
+.content {
+  flex: 1;
+  padding: $spacing-6 $spacing-8;
+  
+  overflow-y: auto;
+  overflow-x: hidden;
+  
+  // 自定义滚动条样式（可选）
+  &::-webkit-scrollbar {
+    width: $spacing-2;
+  }
+  
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  
+  &::-webkit-scrollbar-thumb {
+    background-color: hsla(var(--app-color-dark-hsl), $opacity-20);
+    border-radius: var(--token-radius-full);
+    
+    :global(body.dark) & {
+      background-color: hsla(var(--app-color-light-hsl), $opacity-20);
+    }
+    
+    &:hover {
+      background-color: hsla(var(--app-color-dark-hsl), $opacity-30);
+      
+      :global(body.dark) & {
+        background-color: hsla(var(--app-color-light-hsl), $opacity-30);
+      }
+    }
+  }
+}

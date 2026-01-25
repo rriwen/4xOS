@@ -1,10 +1,6 @@
 const appleMenu = {
   title: 'apple',
   menu: {
-    'about-this-mac': {
-      title: 'About 4xOS',
-      breakAfter: true,
-    },
     'system-preferences': {
       title: 'System Preferences...',
     },

@@ -1,30 +1,31 @@
+@import '../../design-tokens/tokens';
+
 .container {
   position: fixed;
-  margin-bottom: 0.3rem;
+  margin-bottom: $spacing-3;
   bottom: 0;
   left: 0;
-  z-index: 9900;
+  z-index: var(--token-z-index-dock);
 
   width: 100%;
   height: 5.2rem;
 
-  padding: 0.4rem;
+  padding: $spacing-3;
 
   display: flex;
   justify-content: center;
 }
 
 .dockEl {
-  background-color: hsla(var(--app-color-light-hsl), 0.4);
+  background-color: hsla(var(--app-color-light-hsl), $opacity-40);
 
-  box-shadow: inset 0 0 0 0.2px hsla(var(--app-color-grey-100-hsl), 0.7),
-    0 0 0 0.2px hsla(var(--app-color-grey-900-hsl), 0.7), hsla(0, 0%, 0%, 0.3) 2px 5px 19px 7px;
+  box-shadow: var(--token-shadow-dock);
 
   position: relative;
 
-  padding: 0.3rem;
+  padding: $spacing-3;
 
-  border-radius: 1.2rem;
+  border-radius: var(--token-radius-2xl);
 
   height: 100%;
 
@@ -39,7 +40,7 @@
 
     border: inherit;
 
-    backdrop-filter: blur(10px);
+    backdrop-filter: blur($blur-md);
 
     position: absolute;
     top: 0;
@@ -51,9 +52,9 @@
 
 .divider {
   height: 100%;
-  width: 0.2px;
+  width: $border-width-thin;
 
-  background-color: hsla(var(--app-color-dark-hsl), 0.3);
+  background-color: hsla(var(--app-color-dark-hsl), $opacity-30);
 
-  margin: 0 2px;
+  margin: 0 $spacing-1;
 }

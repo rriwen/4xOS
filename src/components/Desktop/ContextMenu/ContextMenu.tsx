@@ -1,9 +1,8 @@
 import { ComponentChildren, RefObject } from 'preact';
-import { useEffect, useRef, useState } from 'preact/hooks';
+import { useEffect, useRef } from 'preact/hooks';
 import { RovingTabIndexProvider, useFocusEffect, useRovingTabIndex } from 'react-roving-tabindex';
 import { contextMenuConfig } from '__/data/menu/context.menu.config';
 import { useContextMenu, useFocusOutside } from '__/hooks';
-import { WallpaperPicker } from '__/components/Desktop/WallpaperPicker/WallpaperPicker';
 import css from './ContextMenu.module.scss';
 
 type Props = {
@@ -12,7 +11,6 @@ type Props = {
 
 export const ContextMenu = ({ outerRef }: Props) => {
   const { xPos, yPos, isMenuVisible, setIsMenuVisible } = useContextMenu(outerRef);
-  const [isWallpaperPickerOpen, setIsWallpaperPickerOpen] = useState(false);
 
   const containerRef = useRef<HTMLDivElement>();
 
@@ -25,16 +23,13 @@ export const ContextMenu = ({ outerRef }: Props) => {
   useFocusOutside(containerRef, () => isMenuVisible && setIsMenuVisible(false));
 
   const handleMenuClick = (key: string) => {
-    if (key === 'change-desktop-bg') {
-      setIsMenuVisible(false);
-      setIsWallpaperPickerOpen(true);
-    }
+    // Menu item click handler
   };
 
   useEffect(() => {
     if (containerRef.current && isMenuVisible) {
-      containerRef.current.style.setProperty('--menu-top', `${yPos}px`);
-      containerRef.current.style.setProperty('--menu-left', `${xPos}px`);
+      containerRef.current.style.top = yPos;
+      containerRef.current.style.left = xPos;
     }
   }, [isMenuVisible, yPos, xPos]);
 
@@ -60,10 +55,6 @@ export const ContextMenu = ({ outerRef }: Props) => {
       ) : (
         <></>
       )}
-      <WallpaperPicker
-        isOpen={isWallpaperPickerOpen}
-        onClose={() => setIsWallpaperPickerOpen(false)}
-      />
     </>
   );
 };

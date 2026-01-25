@@ -4,6 +4,8 @@
 
   display: grid;
   grid-template-rows: auto 1fr auto;
+
+  position: relative;
 }
 
 .backgroundCover {
@@ -21,11 +23,12 @@
   background-size: cover;
   background-position: center;
 
-  // 默认背景（如果动态设置失败时的后备）
-  background-image: var(--wallpaper-url, url(/assets/wallpapers/37-2.jpg));
+  // 壁纸
+  background-image: url(/assets/wallpapers/light-background.jpg);
 
   :global(body.dark) & {
-    background-image: var(--wallpaper-url, url(/assets/wallpapers/37-1.jpg));
+    // 暗色模式使用暗色版本的壁纸
+    background-image: url(/assets/wallpapers/dark-background.jpg);
   }
 
   // 过渡效果

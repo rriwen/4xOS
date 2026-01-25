@@ -1,30 +1,30 @@
+@import '../../../design-tokens/tokens';
+
 .contextContainer {
   --additional-shadow: 0 0 0 0 white;
-  --menu-top: 0;
-  --menu-left: 0;
   display: block;
-  z-index: 99999999;
+  z-index: var(--token-z-index-tooltip);
 
   min-width: 16rem;
 
-  padding: 0.5rem;
+  padding: $spacing-4;
 
-  position: absolute;
-  top: var(--menu-top);
-  left: var(--menu-left);
+  position: fixed;
+  top: 0;
+  left: 0;
 
   user-select: none;
 
-  background-color: hsla(var(--app-color-light-hsl), 0.3);
-  backdrop-filter: blur(15px);
+  background-color: hsla(var(--app-color-light-hsl), $opacity-30);
+  backdrop-filter: blur($blur-xl);
 
-  border-radius: 0.5rem;
+  border-radius: var(--token-radius-base);
 
-  box-shadow: hsla(0, 0%, 0%, 0.3) 0px 0px 11px 0px, var(--additional-shadow);
+  box-shadow: hsla(0, 0%, 0%, $opacity-30) 0px 0px 11px 0px, var(--additional-shadow);
 
   :global(body.dark) & {
-    --additional-shadow: inset 0 0 0 0.9px hsla(var(--app-color-dark-hsl), 0.3),
-      0 0 0 1.2px hsla(var(--app-color-light-hsl), 0.3);
+    --additional-shadow: var(--token-shadow-inner-md),
+      0 0 0 1.2px hsla(var(--app-color-light-hsl), $opacity-30);
   }
 }
 
@@ -36,21 +36,21 @@
 
   width: 100%;
 
-  padding: 0.3rem 0.4rem;
-  margin: 0.2rem 0;
+  padding: $spacing-3 $spacing-3;
+  margin: $spacing-1 0;
 
-  letter-spacing: 0.4px;
-  font-weight: 400;
-  font-size: 0.9rem;
+  letter-spacing: var(--token-letter-spacing-wider);
+  font-weight: var(--token-font-weight-regular);
+  font-size: var(--token-font-size-md);
 
-  border-radius: 0.3rem;
+  border-radius: $radius-md;
 
   transition: none;
 
   color: hsla(var(--app-color-dark-hsl), var(--alpha));
 
   &.disabled {
-    --alpha: 0.5;
+    --alpha: $opacity-50;
   }
 
   &:not(.disabled) {
@@ -64,9 +64,9 @@
 
 .divider {
   width: 100%;
-  height: 0.2px;
+  height: $border-width-thin;
 
-  background-color: hsla(var(--app-color-dark-hsl), 0.2);
+  background-color: hsla(var(--app-color-dark-hsl), $opacity-20);
 
-  margin: 2px 0;
+  margin: $spacing-1 0;
 }

@@ -1,25 +1,27 @@
+@import '../../../design-tokens/tokens';
+
 .container {
   --border-size: 0;
 
   display: grid;
   grid-auto-rows: 1fr;
-  gap: 0.25rem;
+  gap: $spacing-2;
 
   position: relative;
 
-  padding: 0.5rem;
+  padding: $spacing-4;
 
-  border-radius: 0.75rem;
-  box-shadow: hsla(0, 0%, 0%, 0.3) 0px 1px 4px -1px,
-    inset 0 0 0 var(--border-size) hsla(var(--app-color-dark-hsl), 0.3),
-    0 0 0 var(--border-size) hsla(var(--app-color-light-hsl), 0.3);
+  border-radius: var(--token-radius-lg);
+  box-shadow: hsla(0, 0%, 0%, $opacity-30) 0px 1px 4px -1px,
+    inset 0 0 0 var(--border-size) hsla(var(--app-color-dark-hsl), $opacity-30),
+    0 0 0 var(--border-size) hsla(var(--app-color-light-hsl), $opacity-30);
 
-  background-color: hsla(var(--app-color-light-hsl), 0.5);
+  background-color: hsla(var(--app-color-light-hsl), $opacity-50);
 
   grid-column: var(--column-start) / span var(--column-span);
   grid-row: var(--row-start) / span var(--row-span);
 
   :global(body.dark) & {
-    --border-size: 0.4px;
+    --border-size: $border-width-thin;
   }
 }

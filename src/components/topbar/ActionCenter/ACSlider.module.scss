@@ -1,12 +1,14 @@
+@import '../../../design-tokens/tokens';
+
 .slider {
   --size: 1.4rem;
   width: 100%;
   height: var(--size);
 
-  box-shadow: 0 0 0 0.35px hsla(var(--app-color-grey-600-hsl), 0.7);
-  border-radius: 1rem;
+  box-shadow: 0 0 0 0.35px hsla(var(--app-color-grey-600-hsl), $opacity-70);
+  border-radius: var(--token-radius-xl);
 
-  background-color: hsla(var(--app-color-dark-hsl), 0.1);
+  background-color: hsla(var(--app-color-dark-hsl), $opacity-10);
 
   display: flex;
 }
@@ -25,9 +27,9 @@
 
   background-color: white;
 
-  border-radius: 50%;
+  border-radius: var(--token-radius-full);
 
-  box-shadow: hsla(0, 0%, 0%, 0.3) 0px 0px 3px 1px;
+  box-shadow: hsla(0, 0%, 0%, $opacity-30) 0px 0px 3px 1px;
 
   cursor: grab;
 }

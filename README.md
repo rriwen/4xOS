@@ -1,10 +1,10 @@
-# 4xOS - macOS Web 体验
+# macOS Web 体验
 
 这是一个开源项目，旨在使用标准的 Web 技术（HTML、CSS 和 JavaScript）在 Web 上复刻 macOS 的桌面体验。
 
 ## 项目简介
 
-4xOS 是一个基于 Web 的 macOS 桌面环境模拟器，提供了类似 macOS Monterey/Big Sur 的桌面体验。项目使用现代前端技术栈构建，可以在任何现代浏览器中运行。
+这是一个基于 Web 的 macOS 桌面环境模拟器，提供了类似 macOS Monterey/Big Sur 的桌面体验。项目使用现代前端技术栈构建，可以在任何现代浏览器中运行。
 
 ## 技术栈
 
@@ -52,7 +52,6 @@ npm run serve
 ## 项目结构
 
 ```
-4xOS-main/
 ├── src/              # 源代码目录
 │   ├── components/   # React/Preact 组件
 │   ├── stores/       # 状态管理

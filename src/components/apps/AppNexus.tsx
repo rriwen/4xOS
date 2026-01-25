@@ -6,16 +6,14 @@ type AppNexusProps = {
   isBeingDragged: boolean;
 };
 
-const Calculator = lazy(() => import('./Calculator/Calculator'));
-const Calendar = lazy(() => import('./Calendar/Calendar'));
-const AboutSystem = lazy(() => import('./AboutSystem/AboutSystem'));
+const TalkTo4x = lazy(() => import('./TalkTo4x/TalkTo4x'));
+const Safari = lazy(() => import('./Safari/Safari'));
 
 const PlaceholderApp = lazy(() => import('./Placeholder/Placeholder'));
 
 export const AppNexus = ({ appID, isBeingDragged }: AppNexusProps) => {
-  if (appID === 'calculator') return <Calculator />;
-  if (appID === 'calendar') return <Calendar />;
-  if (appID === 'about-system') return <AboutSystem />;
+  if (appID === 'talk-to-4x') return <TalkTo4x />;
+  if (appID === 'safari') return <Safari />;
 
   return <PlaceholderApp appID={appID} />;
 };

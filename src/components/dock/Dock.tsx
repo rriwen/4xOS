@@ -6,6 +6,15 @@ import { openAppsStore } from '__/stores/apps.store';
 import css from './Dock.module.scss';
 import { DockItem } from './DockItem';
 
+// 定义要在 Dock 中显示的应用
+const dockAppIDs: Array<keyof typeof appsConfig> = [
+  'finder',
+  'safari',
+  'talk-to-4x',
+  'mail',
+  'system-preferences',
+];
+
 export const Dock = () => {
   const [openApps] = useAtom(openAppsStore);
 
@@ -20,7 +29,7 @@ export const Dock = () => {
         onMouseLeave={() => mouseX.set(null)}
       >
         <RovingTabIndexProvider options={{ direction: 'horizontal' }}>
-          {Object.keys(appsConfig).map((appID, i) => (
+          {dockAppIDs.map((appID, i) => (
             <div>
               {appsConfig[appID].dockBreaksBefore && (
                 <div class={css.divider} key={`${appID}-divider`} aria-hidden="true" />

@@ -1,24 +1,62 @@
+@import '../../../design-tokens/tokens';
+
 .container {
   --button-size: 0.8rem;
 
   display: grid;
   grid-template-columns: repeat(3, var(--button-size));
   align-items: center;
-  gap: 0.6rem;
+  gap: $spacing-4;
 
   height: 100%;
 
-  &.unFocussed .trafficLight {
-    --bgcolor: hsla(var(--app-color-dark-hsl), 0.3);
-    --border-color: hsla(var(--app-color-dark-hsl), 0.5);
+  // 确保 TrafficLights 区域可以接收鼠标事件，即使窗口在下层
+  pointer-events: auto;
+  position: relative;
+  z-index: 10; // 确保 TrafficLights 在窗口内容之上
+
+  // 非活动窗口
+  &.unFocussed {
+    // 默认：隐藏背景色和图标
+    .trafficLight {
+      background-color: transparent;
+      box-shadow: none;
+    }
+
+    svg {
+      visibility: hidden;
+    }
+
+    // hover 时：显示背景色和图标
+    &:hover {
+      .trafficLight {
+        background-color: var(--bgcolor);
+        box-shadow: 0 0 0 0.5px var(--border-color);
+      }
+
+      svg {
+        visibility: visible;
+      }
+    }
   }
 
-  svg {
-    visibility: hidden;
-  }
+  // 活动窗口
+  &:not(.unFocussed) {
+    // 默认：显示背景色，隐藏图标
+    .trafficLight {
+      background-color: var(--bgcolor);
+      box-shadow: 0 0 0 0.5px var(--border-color);
+    }
 
-  &:hover svg {
-    visibility: visible;
+    svg {
+      visibility: hidden;
+      transition: visibility $transition-fast $ease-out;
+    }
+
+    // hover 时：显示图标
+    &:hover svg {
+      visibility: visible;
+    }
   }
 }
 
@@ -26,10 +64,10 @@
   height: var(--button-size);
   width: var(--button-size);
 
-  border-radius: 50%;
+  border-radius: var(--token-radius-full);
 
-  background-color: var(--bgcolor);
-  box-shadow: 0 0 0 0.5px var(--border-color);
+  // 默认样式由容器状态控制
+  transition: background-color $transition-fast $ease-out, box-shadow $transition-fast $ease-out;
 }
 
 .closeLight {
