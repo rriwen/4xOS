@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import { useAtom } from 'jotai';
+import { useAtom, useSetAtom } from 'jotai';
 import { RefObject } from 'preact';
 import { useEffect, useMemo, useRef, useState } from 'preact/hooks';
 import { Suspense } from 'react';
@@ -61,22 +61,21 @@ export const Window = ({ appID }: WindowProps) => {
     if (initializedRef.current) return; // 已经初始化过，跳过
     
     // 使用函数式更新确保获取最新的 windowZIndices 状态
-    setWindowZIndices((prev: Partial<Record<AppID, number>>) => {
+    setWindowZIndices((prev) => {
       // 如果还没有为这个窗口分配 z-index，则分配一个新的
       if (!prev[appID]) {
         // 计算新的基础 z-index：找到当前所有打开窗口中最高的 z-index，然后加 1
-        const values = Object.values(prev).filter((v): v is number => typeof v === 'number');
-        const maxZIndex = values.length > 0 ? Math.max(100, ...values) : 100;
+        const maxZIndex = Math.max(
+          100, // 基础 z-index（从设计令牌）
+          ...Object.values(prev),
+        );
         const newZIndex = maxZIndex + 1;
         setAppZIndex(newZIndex);
         initializedRef.current = true;
         return { ...prev, [appID]: newZIndex };
       } else {
         // 如果已经有 z-index，使用它（窗口重新打开的情况）
-        const existingZIndex = prev[appID];
-        if (existingZIndex !== undefined) {
-          setAppZIndex(existingZIndex);
-        }
+        setAppZIndex(prev[appID]);
         initializedRef.current = true;
         return prev; // 不改变状态，避免触发其他 effect
       }
@@ -95,7 +94,7 @@ export const Window = ({ appID }: WindowProps) => {
       if (appZIndex !== activeAppZIndex) {
         setAppZIndex(activeAppZIndex);
         // 只有当存储的值不同时才更新，避免不必要的状态更新
-        setWindowZIndices((prev: Partial<Record<AppID, number>>) => {
+        setWindowZIndices((prev) => {
           if (prev[appID] !== activeAppZIndex) {
             return { ...prev, [appID]: activeAppZIndex };
           }
@@ -105,7 +104,7 @@ export const Window = ({ appID }: WindowProps) => {
     } else {
       // 非活动窗口：从存储中恢复之前的 z-index
       // 使用函数式更新获取最新的 windowZIndices，但不更新状态
-      setWindowZIndices((prev: Partial<Record<AppID, number>>) => {
+      setWindowZIndices((prev) => {
         const storedZIndex = prev[appID];
         // 只有当存储的 z-index 存在且与当前不同时才更新本地状态
         if (storedZIndex && storedZIndex !== activeAppZIndex && storedZIndex !== appZIndex) {

@@ -1,5 +1,4 @@
 import clsx from 'clsx';
-import { JSX } from 'preact';
 import { useState, useCallback, useEffect, useRef } from 'preact/hooks';
 import { useTheme } from '__/hooks';
 import css from './Safari.module.scss';
@@ -41,7 +40,7 @@ const Safari = () => {
   }, [theme, notifyIframeTheme]);
 
   // 切换标签页
-  const switchTab = useCallback((tabId: string, e?: any) => {
+  const switchTab = useCallback((tabId: string, e?: JSX.TargetedMouseEvent<HTMLDivElement>) => {
     if (e) {
       // 如果点击的是关闭按钮或其子元素，不切换标签页
       const target = e.target as HTMLElement;
@@ -55,7 +54,7 @@ const Safari = () => {
 
   // 关闭标签页
   const closeTab = useCallback(
-    (tabId: string, e: any) => {
+    (tabId: string, e: JSX.TargetedMouseEvent<HTMLButtonElement>) => {
       e.preventDefault(); // 阻止默认行为
       e.stopPropagation(); // 阻止事件冒泡，避免触发标签页切换和窗口拖拽
 
