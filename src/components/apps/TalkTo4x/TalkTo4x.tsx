@@ -4,7 +4,13 @@ import { useImmerAtom } from 'jotai-immer';
 import { useState, useRef, useEffect } from 'react';
 import { fetchAndParseResume } from '__/helpers/parse-resume';
 import type { ResumeData } from '__/helpers/parse-resume';
-import { activeAppStore, minimizedAppsStore, openAppsStore } from '__/stores/apps.store';
+import {
+  activeAppStore,
+  globalZIndexCounterStore,
+  minimizedAppsStore,
+  openAppsStore,
+  windowZIndexStore,
+} from '__/stores/apps.store';
 import css from './TalkTo4x.module.scss';
 
 interface Message {
@@ -143,6 +149,8 @@ const TalkTo4x = () => {
   const [, setOpenApps] = useImmerAtom(openAppsStore);
   const [, setActiveApp] = useAtom(activeAppStore);
   const [, setMinimizedApps] = useImmerAtom(minimizedAppsStore);
+  const [windowZIndices, setWindowZIndices] = useAtom(windowZIndexStore);
+  const [globalZIndexCounter, setGlobalZIndexCounter] = useAtom(globalZIndexCounterStore);
   
   /**
    * 打开 Safari 应用
@@ -156,16 +164,44 @@ const TalkTo4x = () => {
       return minimized;
     });
     
-    // 先打开 Safari
+    // 先分配最高的z-index（在打开窗口之前）
+    const newZIndex = globalZIndexCounter + 1;
+    setGlobalZIndexCounter(newZIndex);
+    setWindowZIndices((prev) => ({
+      ...prev,
+      'safari': newZIndex,
+    }));
+    
+    // 打开应用
     setOpenApps((apps) => {
       apps['safari'] = true;
       return apps;
     });
-    
-    // 使用 setTimeout 确保窗口已经渲染后再激活，这样 Safari 窗口会置顶
-    setTimeout(() => {
-      setActiveApp('safari');
-    }, 0);
+
+    // 立即激活应用，这样Window组件的useLayoutEffect会立即更新z-index
+    setActiveApp('safari');
+
+    // 使用双重 requestAnimationFrame 确保在窗口渲染后更新 z-index
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        // 确保 z-index 是最高的
+        setGlobalZIndexCounter((current) => {
+          const finalZIndex = Math.max(current + 1, newZIndex + 1);
+          setWindowZIndices((prev) => ({
+            ...prev,
+            'safari': finalZIndex,
+          }));
+          
+          // 直接更新 DOM 的 z-index，确保窗口在最上层
+          const safariWindow = document.querySelector(`[data-app-id="safari"]`) as HTMLElement;
+          if (safariWindow) {
+            safariWindow.style.zIndex = `${finalZIndex}`;
+          }
+          
+          return finalZIndex;
+        });
+      });
+    });
   };
 
   // 在组件挂载时加载简历数据

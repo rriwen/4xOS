@@ -18,17 +18,22 @@ export const openAppsStore = atom<Record<AppID, boolean>>({
 export const activeAppStore = atom<AppID>('finder');
 
 /**
- * Maximum zIndex for the active app
- * Initialize with base window z-index (100) minus increment (2)
- * So first window gets z-index 100, active window gets higher
+ * Global z-index counter
+ * Each new window or activated window gets the next highest z-index
  */
-export const activeAppZIndexStore = atom(98);
+export const globalZIndexCounterStore = atom(100);
 
 /**
  * Store to track z-index for each window
- * Each window gets a base z-index, active window gets the highest
+ * Each window gets a base z-index, new/active window gets the highest
  */
 export const windowZIndexStore = atom<Partial<Record<AppID, number>>>({});
+
+/**
+ * Maximum zIndex for the active app (deprecated, kept for compatibility)
+ * @deprecated Use globalZIndexCounterStore instead
+ */
+export const activeAppZIndexStore = atom(98);
 
 /**
  * Store to track minimized state for each window

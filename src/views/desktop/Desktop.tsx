@@ -4,7 +4,12 @@ import { lazy, Suspense, useEffect, useRef, useState } from 'react';
 import { ContextMenu } from '__/components/Desktop/ContextMenu/ContextMenu';
 import { StartupChime } from '__/components/Desktop/StartupChime';
 import { WindowsArea } from '__/components/Desktop/Window/WindowsArea';
-import { activeAppStore, openAppsStore } from '__/stores/apps.store';
+import {
+  activeAppStore,
+  globalZIndexCounterStore,
+  openAppsStore,
+  windowZIndexStore,
+} from '__/stores/apps.store';
 import { themeAtom } from '__/stores/theme.store';
 import css from './Desktop.module.scss';
 
@@ -17,6 +22,8 @@ export const Desktop = () => {
   const backgroundRef = useRef<HTMLDivElement>(null);
   const [, setOpenApps] = useImmerAtom(openAppsStore);
   const [, setActiveApp] = useAtom(activeAppStore);
+  const [, setWindowZIndices] = useAtom(windowZIndexStore);
+  const [, setGlobalZIndexCounter] = useAtom(globalZIndexCounterStore);
   const [theme] = useAtom(themeAtom);
   const [wallpaperLoaded, setWallpaperLoaded] = useState(false);
 
@@ -26,8 +33,17 @@ export const Desktop = () => {
       apps['talk-to-4x'] = true;
       return apps;
     });
+    // 为初始窗口设置z-index
+    const initialZIndex = 100;
+    setGlobalZIndexCounter(initialZIndex);
+    setWindowZIndices((prev) => {
+      if (!prev['talk-to-4x']) {
+        return { ...prev, 'talk-to-4x': initialZIndex };
+      }
+      return prev;
+    });
     setActiveApp('talk-to-4x');
-  }, [setOpenApps, setActiveApp]);
+  }, [setOpenApps, setActiveApp, setWindowZIndices, setGlobalZIndexCounter]);
 
   // 预加载壁纸
   useEffect(() => {

@@ -1,8 +1,7 @@
 import clsx from 'clsx';
-import { useAtom } from 'jotai';
+import { useAtom, useAtomValue } from 'jotai';
 import { useImmerAtom } from 'jotai-immer';
-import { RefObject } from 'react';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { RefObject, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { Suspense } from 'react';
 import { Rnd } from 'react-rnd';
 import { AppNexus } from '__/components/apps/AppNexus';
@@ -10,8 +9,8 @@ import { appsConfig } from '__/data/apps/apps-config';
 import { randint } from '__/helpers/random';
 import {
   activeAppStore,
-  activeAppZIndexStore,
   AppID,
+  globalZIndexCounterStore,
   minimizedAppsStore,
   WindowState,
   windowStateStore,
@@ -39,93 +38,21 @@ class WindowRnd extends Rnd {
 }
 
 export const Window = ({ appID }: WindowProps) => {
-  const [activeAppZIndex] = useAtom(activeAppZIndexStore);
   const [activeApp, setActiveApp] = useAtom(activeAppStore);
   const [windowZIndices, setWindowZIndices] = useAtom(windowZIndexStore);
+  const globalZIndexCounter = useAtomValue(globalZIndexCounterStore);
+  const [, setGlobalZIndexCounter] = useAtom(globalZIndexCounterStore);
   const [minimizedApps] = useAtom(minimizedAppsStore);
   const [windowStates, setWindowStates] = useImmerAtom(windowStateStore);
 
-  const containerRef = useRef<HTMLDivElement>();
+  const containerRef = useRef<HTMLDivElement>(null);
+  const windowRef = useRef<WindowRnd>(null);
+  const isMaximizedRef = useRef(false);
+  const originalSizeRef = useRef<WindowSize | null>(null);
+  const originalPositionRef = useRef<WindowPosition | null>(null);
+  const hasTriedAutoMaximizeRef = useRef(false);
 
-  // 基础 z-index 从设计令牌获取（100）
-  const [appZIndex, setAppZIndex] = useState(100);
-  const [isBeingDragged, setIsBeingDragged] = useState(false);
-  
-  // 使用 ref 跟踪是否已初始化，避免重复初始化
-  const initializedRef = useRef(false);
-
-  const randX = useMemo(() => randint(-600, 600), []);
-  const randY = useMemo(() => randint(-100, 100), []);
-
-  const windowRef = useRef<WindowRnd>();
-  const maximizeApp = useMaximizeWindow(windowRef, appID, setWindowStates, setWindowSize, setWindowPosition);
-
-  // 初始化窗口 z-index（仅在窗口首次挂载时）
-  useEffect(() => {
-    if (initializedRef.current) return; // 已经初始化过，跳过
-    
-    // 使用函数式更新确保获取最新的 windowZIndices 状态
-    setWindowZIndices((prev: Partial<Record<AppID, number>>) => {
-      // 如果还没有为这个窗口分配 z-index，则分配一个新的
-      if (!prev[appID]) {
-        // 计算新的基础 z-index：找到当前所有打开窗口中最高的 z-index，然后加 1
-        const values = Object.values(prev).filter((v): v is number => typeof v === 'number');
-        const maxZIndex = values.length > 0 ? Math.max(100, ...values) : 100;
-        const newZIndex = maxZIndex + 1;
-        setAppZIndex(newZIndex);
-        initializedRef.current = true;
-        return { ...prev, [appID]: newZIndex };
-      } else {
-        // 如果已经有 z-index，使用它（窗口重新打开的情况）
-        const existingZIndex = prev[appID];
-        if (existingZIndex !== undefined) {
-          setAppZIndex(existingZIndex);
-        }
-        initializedRef.current = true;
-        return prev; // 不改变状态，避免触发其他 effect
-      }
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [appID]); // 只在 appID 变化时执行
-
-  // 当窗口变为活动窗口时，更新 z-index
-  useEffect(() => {
-    // 等待初始化完成
-    if (!initializedRef.current) return;
-    
-    if (activeApp === appID) {
-      // 活动窗口使用最高的 z-index
-      // 只有当 z-index 实际需要改变时才更新
-      if (appZIndex !== activeAppZIndex) {
-        setAppZIndex(activeAppZIndex);
-        // 只有当存储的值不同时才更新，避免不必要的状态更新
-        setWindowZIndices((prev: Partial<Record<AppID, number>>) => {
-          if (prev[appID] !== activeAppZIndex) {
-            return { ...prev, [appID]: activeAppZIndex };
-          }
-          return prev; // 不改变状态，避免触发其他 effect
-        });
-      }
-    } else {
-      // 非活动窗口：从存储中恢复之前的 z-index
-      // 使用函数式更新获取最新的 windowZIndices，但不更新状态
-      setWindowZIndices((prev: Partial<Record<AppID, number>>) => {
-        const storedZIndex = prev[appID];
-        // 只有当存储的 z-index 存在且与当前不同时才更新本地状态
-        if (storedZIndex && storedZIndex !== activeAppZIndex && storedZIndex !== appZIndex) {
-          setAppZIndex(storedZIndex);
-        }
-        return prev; // 不改变状态，避免触发其他 effect
-      });
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [activeApp, activeAppZIndex, appID, appZIndex]); // 添加 appZIndex 以便比较
-
-  useEffect(() => {
-    containerRef.current?.focus();
-  }, []);
-
-  const { resizable, height, width, trafficLightsStyle, expandable, defaultPosition, openMaximized } = appsConfig[appID];
+  const { resizable, height, width, trafficLightsStyle, defaultPosition, openMaximized } = appsConfig[appID];
 
   // 计算默认位置
   const getDefaultPosition = useMemo(() => {
@@ -144,31 +71,126 @@ export const Window = ({ appID }: WindowProps) => {
       return defaultPosition;
     } else {
       // 默认随机位置
+      const randX = randint(-600, 600);
+      const randY = randint(-100, 100);
       return {
         x: ((3 / 2) * document.body.clientWidth + randX) / 2,
         y: (100 + randY) / 2,
       };
     }
-  }, [defaultPosition, width, height, randX, randY]);
+  }, [defaultPosition, width, height]);
 
   // 获取保存的窗口状态，如果没有则使用默认值
   const savedState = windowStates[appID];
-  const [windowSize, setWindowSize] = useState<WindowSize>(() => 
-    savedState ? { width: savedState.width, height: savedState.height } : { width, height }
-  );
-  const [windowPosition, setWindowPosition] = useState<WindowPosition>(() =>
-    savedState ? { x: savedState.x, y: savedState.y } : getDefaultPosition
-  );
-
-  // 当窗口状态从store恢复时，更新本地state
-  useEffect(() => {
-    if (savedState) {
-      setWindowSize({ width: savedState.width, height: savedState.height });
-      setWindowPosition({ x: savedState.x, y: savedState.y });
+  
+  // 如果配置了 openMaximized，初始大小使用最大化大小，但位置先居中（最大化时会自动移动到 0,0）
+  const [windowSize, setWindowSize] = useState<WindowSize>(() => {
+    if (openMaximized) {
+      // 如果配置了 openMaximized，初始化为最大化大小
+      const dockElementHeight = document.getElementById('dock')?.clientHeight ?? 0;
+      const topBarElementHeight = document.getElementById('top-bar')?.clientHeight ?? 0;
+      const desktopHeight = document.body.clientHeight - dockElementHeight - topBarElementHeight;
+      const desktopWidth = document.body.clientWidth;
+      return { width: desktopWidth, height: desktopHeight };
     }
-  }, [savedState]);
+    return savedState ? { width: savedState.width, height: savedState.height } : { width, height };
+  });
+  
+  const [windowPosition, setWindowPosition] = useState<WindowPosition>(() => {
+    // 即使配置了 openMaximized，初始位置也使用 defaultPosition（通常是 center）
+    // 最大化时会自动移动到 (0, 0)
+    return savedState ? { x: savedState.x, y: savedState.y } : getDefaultPosition;
+  });
+  const [appZIndex, setAppZIndex] = useState(100);
+  const [isBeingDragged, setIsBeingDragged] = useState(false);
+  const [forceZIndexUpdate, setForceZIndexUpdate] = useState(0); // 用于强制触发 z-index 更新
+  const isMinimized = minimizedApps[appID] === true;
+  
+  // 如果配置了 openMaximized，在初始化时设置最大化标志
+  useEffect(() => {
+    if (openMaximized) {
+      isMaximizedRef.current = true;
+    }
+  }, [openMaximized]);
 
-  // 保存窗口状态到store
+  // 初始化窗口z-index
+  useEffect(() => {
+    setWindowZIndices((prev) => {
+      if (!prev[appID]) {
+        // 新窗口：分配新的z-index
+        let newZIndex = 100;
+        setGlobalZIndexCounter((current) => {
+          newZIndex = current + 1;
+          setAppZIndex(newZIndex);
+          return newZIndex;
+        });
+        return { ...prev, [appID]: newZIndex };
+      } else {
+        // 已有窗口：优先使用预设的更高 z-index
+        const savedZIndex = prev[appID];
+        if (savedZIndex !== undefined) {
+          setAppZIndex(savedZIndex);
+          // 如果预设的 z-index 比当前全局计数器高，更新全局计数器
+          if (savedZIndex > globalZIndexCounter) {
+            setGlobalZIndexCounter(savedZIndex);
+          } else {
+            // 否则确保计数器至少等于保存的值
+            setGlobalZIndexCounter((current) => Math.max(current, savedZIndex));
+          }
+        }
+        return prev;
+      }
+    });
+  }, [appID, setWindowZIndices, setGlobalZIndexCounter, globalZIndexCounter]);
+
+  // 当窗口变为活动窗口时，更新z-index
+  // 也监听 forceZIndexUpdate 的变化，确保 focusCurrentApp 总是能触发更新
+  useLayoutEffect(() => {
+    if (activeApp === appID || forceZIndexUpdate > 0) {
+      setGlobalZIndexCounter((current) => {
+        // 使用嵌套回调避免闭包问题
+        setWindowZIndices((prev) => {
+          const currentZIndex = prev[appID] || 0;
+          const newZIndex = Math.max(current + 1, currentZIndex + 1);
+          setAppZIndex(newZIndex);
+          // 立即同步更新 DOM 的 z-index
+          const updateDOM = () => {
+            if (windowRef.current?.base) {
+              windowRef.current.base.style.zIndex = `${newZIndex}`;
+            }
+          };
+          updateDOM();
+          requestAnimationFrame(updateDOM);
+          return {
+            ...prev,
+            [appID]: newZIndex,
+          };
+        });
+        return current + 1;
+      });
+    }
+  }, [activeApp, appID, forceZIndexUpdate, setGlobalZIndexCounter, setWindowZIndices]);
+
+  // 更新窗口的z-index样式 - 使用 useLayoutEffect 确保同步更新
+  useLayoutEffect(() => {
+    if (windowRef.current?.base) {
+      windowRef.current.base.style.zIndex = `${appZIndex}`;
+    }
+  }, [appZIndex]);
+  
+  // 额外的 useEffect 作为备用，确保 DOM 更新
+  useEffect(() => {
+    const updateZIndex = () => {
+      if (windowRef.current?.base) {
+        windowRef.current.base.style.zIndex = `${appZIndex}`;
+      }
+    };
+    updateZIndex();
+    // 使用 requestAnimationFrame 确保在下一帧也更新
+    requestAnimationFrame(updateZIndex);
+  }, [appZIndex]);
+
+  // 保存窗口状态
   const saveWindowState = (newSize: WindowSize, newPosition: WindowPosition) => {
     setWindowStates((prev) => {
       prev[appID] = {
@@ -181,36 +203,167 @@ export const Window = ({ appID }: WindowProps) => {
     });
   };
 
-  // 如果配置了打开时最大化，在窗口挂载后自动最大化
-  const maximizedOnMountRef = useRef(false);
-  useEffect(() => {
-    if (openMaximized && !maximizedOnMountRef.current && windowRef.current?.base) {
-      maximizedOnMountRef.current = true;
-      // 延迟执行，确保窗口已经完全渲染
-      setTimeout(() => {
-        maximizeApp();
-      }, 100);
+  // 最大化/恢复窗口
+  const toggleMaximize = () => {
+    if (!windowRef.current?.resizableElement?.current || !windowRef.current?.base) {
+      return;
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [openMaximized, maximizeApp]);
 
-  const focusCurrentApp = () => {
-    setActiveApp(appID);
+    const dockElementHeight = document.getElementById('dock')?.clientHeight ?? 0;
+    const topBarElementHeight = document.getElementById('top-bar')?.clientHeight ?? 0;
+    const desktopHeight = document.body.clientHeight - dockElementHeight - topBarElementHeight;
+    const desktopWidth = document.body.clientWidth;
+
+    const { clientWidth: currentWidth, clientHeight: currentHeight } =
+      windowRef.current.resizableElement.current;
+
+    // 提取当前位置
+    const transform = windowRef.current.base.style.transform;
+    const match = transform.match(/translate\(([^,]+)px,\s*([^)]+)px\)/);
+    const currentX = match ? parseFloat(match[1]) : windowPosition.x;
+    const currentY = match ? parseFloat(match[2]) : windowPosition.y;
+
+    // 添加过渡动画
+    windowRef.current.base.style.transition = 'height 0.3s ease, width 0.3s ease, transform 0.3s ease';
+
+    // 判断是否已最大化
+    const tolerance = 1;
+    const isMaximized = 
+      Math.abs(currentWidth - desktopWidth) <= tolerance && 
+      Math.abs(currentHeight - desktopHeight) <= tolerance &&
+      Math.abs(currentY - 0) <= tolerance;
+
+    if (isMaximized) {
+      // 恢复窗口
+      if (originalSizeRef.current && originalPositionRef.current) {
+        setWindowSize(originalSizeRef.current);
+        setWindowPosition(originalPositionRef.current);
+        saveWindowState(originalSizeRef.current, originalPositionRef.current);
+        isMaximizedRef.current = false;
+      }
+    } else {
+      // 最大化窗口
+      originalSizeRef.current = { width: currentWidth, height: currentHeight };
+      originalPositionRef.current = { x: currentX, y: currentY };
+
+      const maximizedSize = {
+        height: desktopHeight,
+        width: desktopWidth,
+      };
+      const maximizedPosition = { x: 0, y: 0 };
+
+      setWindowSize(maximizedSize);
+      setWindowPosition(maximizedPosition);
+      saveWindowState(maximizedSize, maximizedPosition);
+      isMaximizedRef.current = true;
+    }
+
+    // 清除过渡动画
+    setTimeout(() => {
+      if (windowRef.current?.base) {
+        windowRef.current.base.style.transition = '';
+      }
+    }, 300);
   };
 
-  const isMinimized = minimizedApps[appID] === true;
-
+  // 如果配置了打开时最大化，在窗口挂载后或从最小化恢复时自动最大化
   useEffect(() => {
-    if (windowRef.current?.base) {
-      windowRef.current.base.style.zIndex = `${appZIndex}`;
-      // 如果窗口被最小化，隐藏窗口
-      if (isMinimized) {
-        windowRef.current.base.style.display = 'none';
-      } else {
-        windowRef.current.base.style.display = '';
-      }
+    // 当窗口从最小化恢复时，重置尝试标志
+    if (isMinimized) {
+      hasTriedAutoMaximizeRef.current = false;
+      return;
     }
-  }, [appZIndex, isMinimized]);
+    
+    // 检查是否需要自动最大化
+    // 当窗口打开或激活时，如果配置了 openMaximized 且窗口未最大化，则自动最大化
+    if (openMaximized && !isMinimized && !isMaximizedRef.current && !hasTriedAutoMaximizeRef.current) {
+      hasTriedAutoMaximizeRef.current = true;
+      
+      const checkAndMaximize = () => {
+        // 再次检查条件
+        if (isMaximizedRef.current || isMinimized) {
+          return;
+        }
+        
+        if (windowRef.current?.base && windowRef.current?.resizableElement?.current) {
+          const base = windowRef.current.base;
+          const resizableElement = windowRef.current.resizableElement.current;
+          if (base.offsetWidth > 0 && base.offsetHeight > 0 && resizableElement.offsetWidth > 0 && resizableElement.offsetHeight > 0) {
+            // 确保窗口已经渲染完成，使用双重 requestAnimationFrame 确保在下一帧执行
+            requestAnimationFrame(() => {
+              requestAnimationFrame(() => {
+                if (!isMaximizedRef.current && !isMinimized && windowRef.current?.base && windowRef.current?.resizableElement?.current) {
+                  toggleMaximize();
+                }
+              });
+            });
+          } else {
+            // 如果窗口还没有尺寸，再等一会儿
+            setTimeout(checkAndMaximize, 50);
+          }
+        } else {
+          // 如果窗口还没有挂载，再等一会儿
+          setTimeout(checkAndMaximize, 50);
+        }
+      };
+      // 初始延迟，确保窗口已经渲染
+      setTimeout(checkAndMaximize, 500);
+    }
+  }, [openMaximized, isMinimized, activeApp, appID]);
+
+  // 激活窗口并提升z-index
+  const focusCurrentApp = () => {
+    // 强制触发更新，即使 activeApp 已经是 appID
+    setActiveApp(appID);
+    // 使用 state 来强制触发 z-index 更新
+    setForceZIndexUpdate((prev) => prev + 1);
+    
+    // 直接更新 z-index，不依赖 useEffect，确保即使窗口已经是激活状态也能更新
+    // 使用嵌套回调避免闭包问题，并立即更新 DOM
+    setGlobalZIndexCounter((current) => {
+      setWindowZIndices((prev) => {
+        const currentZIndex = prev[appID] || 0;
+        const newZIndex = Math.max(current + 1, currentZIndex + 1);
+        setAppZIndex(newZIndex);
+        // 立即同步更新 DOM 的 z-index，使用多种方法确保更新
+        const updateDOM = () => {
+          if (windowRef.current?.base) {
+            windowRef.current.base.style.zIndex = `${newZIndex}`;
+          }
+        };
+        // 立即尝试更新
+        updateDOM();
+        // 使用 requestAnimationFrame 确保在下一帧也更新
+        requestAnimationFrame(updateDOM);
+        // 使用 setTimeout 作为最后的备用
+        setTimeout(updateDOM, 0);
+        return {
+          ...prev,
+          [appID]: newZIndex,
+        };
+      });
+      return current + 1;
+    });
+  };
+
+  // 当窗口从最小化恢复时，更新 z-index
+  useEffect(() => {
+    if (!isMinimized && activeApp === appID) {
+      setGlobalZIndexCounter((current) => {
+        const newZIndex = current + 1;
+        setAppZIndex(newZIndex);
+        setWindowZIndices((prev) => ({
+          ...prev,
+          [appID]: newZIndex,
+        }));
+        // 立即同步更新 DOM 的 z-index
+        if (windowRef.current?.base) {
+          windowRef.current.base.style.zIndex = `${newZIndex}`;
+        }
+        return newZIndex;
+      });
+    }
+  }, [isMinimized, activeApp, appID, setGlobalZIndexCounter, setWindowZIndices]);
 
   // 如果窗口被最小化，不渲染内容
   if (isMinimized) {
@@ -227,8 +380,9 @@ export const Window = ({ appID }: WindowProps) => {
       bounds="parent"
       minWidth="300"
       minHeight="300"
+      data-app-id={appID}
+      style={{ zIndex: appZIndex }}
       onDragStart={() => {
-        // 拖拽开始时立即激活窗口，确保窗口置顶
         focusCurrentApp();
         setIsBeingDragged(true);
       }}
@@ -254,7 +408,7 @@ export const Window = ({ appID }: WindowProps) => {
           style={trafficLightsStyle}
           className={clsx(css.trafficLightsContainer, 'app-window-drag-handle')}
         >
-          <TrafficLights appID={appID} onMaximizeClick={maximizeApp} onActivate={focusCurrentApp} />
+          <TrafficLights appID={appID} onMaximizeClick={toggleMaximize} onActivate={focusCurrentApp} />
         </div>
         <div className={clsx(css.titleBar, 'app-window-drag-handle')}>
           <span className={css.title}>{appsConfig[appID].title}</span>
@@ -265,125 +419,6 @@ export const Window = ({ appID }: WindowProps) => {
       </section>
     </Rnd>
   );
-};
-
-/**
- * Extract the x and y from the transform style of the base element using Regex
- * Why using this hacking method:
- * react-rnd uses transform and translate to shift window around instead of top
- * and left and it does not provide the access to x and y values from ref
- * @param transformStyle The transform style string. e.g. translate(1123.75px, 7px)
- * @returns The window position. e.g. { x: 1123.75, y: 7 }
- */
-function extractPositionFromTransformStyle(transformStyle: string): WindowPosition {
-  const matched = transformStyle.matchAll(/[0-9.]+/g);
-  try {
-    return { x: Number(matched.next().value[0]), y: Number(matched.next().value[0]) };
-  } catch {
-    return { x: 0, y: 0 };
-  }
-}
-
-const useMaximizeWindow = (
-  windowRef: RefObject<WindowRnd>,
-  appID: AppID,
-  setWindowStates: (updater: (prev: Partial<Record<AppID, WindowState>>) => void) => void,
-  setWindowSize: (size: WindowSize) => void,
-  setWindowPosition: (position: WindowPosition) => void,
-) => {
-  const originalSizeRef = useRef<WindowSize>({ height: 0, width: 0 });
-  const originalPositionRef = useRef<WindowPosition>({
-    x: 0,
-    y: 0,
-  });
-  const transitionClearanceRef = useRef<number>();
-
-  return () => {
-    if (!windowRef?.current?.resizableElement?.current || !windowRef?.current?.base) {
-      return;
-    }
-
-    // Get desktop height and width
-    const dockElementHeight = document.getElementById('dock')?.clientHeight ?? 0;
-    const topBarElementHeight = document.getElementById('top-bar')?.clientHeight ?? 0;
-    const desktopHeight = document.body.clientHeight - dockElementHeight - topBarElementHeight;
-    const deskTopWidth = document.body.clientWidth;
-
-    // Get current height and width
-    const { clientWidth: windowWidth, clientHeight: windowHeight } =
-      windowRef.current.resizableElement.current;
-
-    // Get current left and top position
-    const { x: windowLeft, y: windowTop } = extractPositionFromTransformStyle(
-      windowRef.current.base.style.transform,
-    );
-
-    // Only when maximizing (not dragging or resizing), should it have transition
-    windowRef.current.base.style.transition =
-      'height 0.3s ease, width 0.3s ease, transform 0.3s ease';
-
-    // Prevent removing transition styles when multiple times of maximizing action takes place in a short period
-    clearTimeout(transitionClearanceRef.current);
-
-    // Transition style gets cleared after 0.5 second as transition only lasts 0.5 second
-    transitionClearanceRef.current = setTimeout(() => {
-      if (windowRef.current?.base) {
-        windowRef.current.base.style.transition = '';
-      }
-      transitionClearanceRef.current = 0;
-    }, 300);
-
-    // 使用容差判断是否已最大化（允许1像素的误差）
-    const tolerance = 1;
-    const isMaximized = 
-      Math.abs(windowWidth - deskTopWidth) <= tolerance && 
-      Math.abs(windowHeight - desktopHeight) <= tolerance &&
-      Math.abs(windowTop - 0) <= tolerance;
-
-    // When it's already maximized, revert the window to the previous size
-    if (isMaximized) {
-      const restoredSize = originalSizeRef.current;
-      const restoredPosition = originalPositionRef.current;
-      windowRef.current.updateSize(restoredSize);
-      windowRef.current.updatePosition(restoredPosition);
-      setWindowSize(restoredSize);
-      setWindowPosition(restoredPosition);
-      setWindowStates((prev) => {
-        prev[appID] = {
-          x: restoredPosition.x,
-          y: restoredPosition.y,
-          width: restoredSize.width,
-          height: restoredSize.height,
-        };
-        return prev;
-      });
-    }
-    // Maximize the window to the size of the desktop
-    else {
-      originalSizeRef.current = { width: windowWidth, height: windowHeight };
-      originalPositionRef.current = { x: windowLeft, y: windowTop };
-
-      const maximizedSize = {
-        height: desktopHeight,
-        width: deskTopWidth,
-      };
-      const maximizedPosition = { x: 0, y: 0 };
-
-      windowRef.current.updateSize(maximizedSize);
-      windowRef.current.updatePosition(maximizedPosition);
-      setWindowSize(maximizedSize);
-      setWindowPosition(maximizedPosition);
-      setWindowStates((prev) => {
-        prev[appID] = {
-          x: maximizedPosition.x,
-          y: maximizedPosition.y,
-          width: maximizedSize.width,
-          height: maximizedSize.height,
-        };
-        return prev;
-      });
-    }
-  };
 };
 
 export default Window;

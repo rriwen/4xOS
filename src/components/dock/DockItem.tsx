@@ -7,8 +7,8 @@ import { useRef, useState } from 'react';
 import { AppConfig } from '__/helpers/create-app-config';
 import {
   activeAppStore,
-  activeAppZIndexStore,
   AppID,
+  globalZIndexCounterStore,
   minimizedAppsStore,
   openAppsStore,
   windowZIndexStore,
@@ -34,8 +34,8 @@ export function DockItem({
   const [, setActiveApp] = useAtom(activeAppStore);
   const [, setMinimizedApps] = useImmerAtom(minimizedAppsStore);
   const [windowZIndices, setWindowZIndices] = useAtom(windowZIndexStore);
-  const [activeAppZIndex] = useAtom(activeAppZIndexStore);
-  const [animateObj, setAnimateObj] = useState({ translateY: ['0%', '0%', '0%'] });
+  const [globalZIndexCounter, setGlobalZIndexCounter] = useAtom(globalZIndexCounterStore);
+  const [animateObj, setAnimateObj] = useState({ translateY: '0%' });
 
   const imgRef = useRef<HTMLImageElement>();
 
@@ -44,8 +44,11 @@ export function DockItem({
   function openApp(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
     if (!shouldOpenWindow) return void externalAction?.(e);
 
-    // 触发点击动画
-    setAnimateObj({ translateY: ['0%', '-39.2%', '0%'] });
+    // 触发点击动画：先向上移动，然后回到原位
+    setAnimateObj({ translateY: '-39.2%' });
+    setTimeout(() => {
+      setAnimateObj({ translateY: '0%' });
+    }, 100);
 
     // 如果窗口已经打开但被最小化，则恢复它
     setMinimizedApps((minimized) => {
@@ -61,16 +64,20 @@ export function DockItem({
       return apps;
     });
 
-    // 如果是新打开的窗口，立即为其分配最高z-index
+    // 为新窗口分配最高的z-index
     const isNewWindow = !windowZIndices[appID];
     if (isNewWindow) {
-      // 找到当前所有窗口中最高的z-index
-      const windowZIndexValues = Object.values(windowZIndices).filter((v): v is number => typeof v === 'number');
-      const maxWindowZIndex = windowZIndexValues.length > 0
-        ? Math.max(100, ...windowZIndexValues)
-        : 100;
-      // 为新窗口分配比当前最高z-index更高的值
-      const newZIndex = Math.max(maxWindowZIndex + 1, activeAppZIndex + 1);
+      // 获取下一个最高的z-index
+      const newZIndex = globalZIndexCounter + 1;
+      setGlobalZIndexCounter(newZIndex);
+      setWindowZIndices((prev) => ({
+        ...prev,
+        [appID]: newZIndex,
+      }));
+    } else {
+      // 如果是已存在的窗口，也给它分配最高的z-index
+      const newZIndex = globalZIndexCounter + 1;
+      setGlobalZIndexCounter(newZIndex);
       setWindowZIndices((prev) => ({
         ...prev,
         [appID]: newZIndex,

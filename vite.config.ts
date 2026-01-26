@@ -7,15 +7,27 @@ export default defineConfig(({ mode }) => {
   // 安全地加载环境变量，即使 .env 文件不存在或无法读取也不会报错
   let env = process.env;
   try {
-    // 尝试加载环境变量，如果失败则使用 process.env
-    env = { ...process.env, ...loadEnv(mode, process.cwd(), '') };
+    // 先检查文件是否存在和可读
+    const envFile = '.env';
+    const envLocalFile = `.env.${mode}.local`;
+    const envModeFile = `.env.${mode}`;
+    
+    const canReadEnv = existsSync(envFile) || existsSync(envLocalFile) || existsSync(envModeFile);
+    
+    if (canReadEnv) {
+      // 尝试加载环境变量，如果失败则使用 process.env
+      env = { ...process.env, ...loadEnv(mode, process.cwd(), '') };
+    }
   } catch (error) {
     // 如果 loadEnv 失败（例如权限问题或文件不存在），使用 process.env
+    // 静默失败，不影响构建
+    console.warn('无法加载 .env 文件，使用系统环境变量:', error instanceof Error ? error.message : String(error));
     env = process.env;
   }
   
   return {
     root: process.cwd(),
+    base: '/',
     plugins: [react()],
     resolve: {
       alias: {
