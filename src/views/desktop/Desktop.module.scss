@@ -17,13 +17,19 @@
   top: 0;
   left: 0;
 
-  will-change: background-image;
+  will-change: background-image, opacity;
 
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
 
-  // 壁纸
+  // 占位背景色，避免白屏
+  background-color: #f5f5f5;
+  :global(body.dark) & {
+    background-color: #1a1a1a;
+  }
+
+  // 壁纸（通过 JavaScript 动态设置，这里作为后备）
   background-image: url(/assets/wallpapers/light-background.jpg);
 
   :global(body.dark) & {
@@ -32,5 +38,5 @@
   }
 
   // 过渡效果
-  transition: background-image 0.3s ease-in-out;
+  transition: background-image 0.3s ease-in-out, opacity 0.3s ease-in-out;
 }
