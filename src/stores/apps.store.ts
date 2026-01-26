@@ -35,3 +35,16 @@ export const windowZIndexStore = atom<Partial<Record<AppID, number>>>({});
  * true = minimized, false/undefined = not minimized
  */
 export const minimizedAppsStore = atom<Partial<Record<AppID, boolean>>>({});
+
+/**
+ * Store to track window position and size for each window
+ * Used to restore window position and size after minimizing
+ */
+export type WindowState = {
+  x: number;
+  y: number;
+  width: number | string;
+  height: number | string;
+};
+
+export const windowStateStore = atom<Partial<Record<AppID, WindowState>>>({});

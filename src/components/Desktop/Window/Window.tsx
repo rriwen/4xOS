@@ -1,5 +1,6 @@
 import clsx from 'clsx';
 import { useAtom } from 'jotai';
+import { useImmerAtom } from 'jotai-immer';
 import { RefObject } from 'react';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Suspense } from 'react';
@@ -12,6 +13,8 @@ import {
   activeAppZIndexStore,
   AppID,
   minimizedAppsStore,
+  WindowState,
+  windowStateStore,
   windowZIndexStore,
 } from '__/stores/apps.store';
 import { TrafficLights } from './TrafficLights';
@@ -40,6 +43,7 @@ export const Window = ({ appID }: WindowProps) => {
   const [activeApp, setActiveApp] = useAtom(activeAppStore);
   const [windowZIndices, setWindowZIndices] = useAtom(windowZIndexStore);
   const [minimizedApps] = useAtom(minimizedAppsStore);
+  const [windowStates, setWindowStates] = useImmerAtom(windowStateStore);
 
   const containerRef = useRef<HTMLDivElement>();
 
@@ -54,7 +58,7 @@ export const Window = ({ appID }: WindowProps) => {
   const randY = useMemo(() => randint(-100, 100), []);
 
   const windowRef = useRef<WindowRnd>();
-  const maximizeApp = useMaximizeWindow(windowRef);
+  const maximizeApp = useMaximizeWindow(windowRef, appID, setWindowStates, setWindowSize, setWindowPosition);
 
   // 初始化窗口 z-index（仅在窗口首次挂载时）
   useEffect(() => {
@@ -123,6 +127,60 @@ export const Window = ({ appID }: WindowProps) => {
 
   const { resizable, height, width, trafficLightsStyle, expandable, defaultPosition, openMaximized } = appsConfig[appID];
 
+  // 计算默认位置
+  const getDefaultPosition = useMemo(() => {
+    if (defaultPosition === 'center') {
+      const dockElementHeight = document.getElementById('dock')?.clientHeight ?? 0;
+      const topBarElementHeight = document.getElementById('top-bar')?.clientHeight ?? 0;
+      const availableHeight = document.body.clientHeight - dockElementHeight - topBarElementHeight;
+      const windowWidth = typeof width === 'number' ? width : parseInt(String(width), 10);
+      const windowHeight = typeof height === 'number' ? height : parseInt(String(height), 10);
+      
+      return {
+        x: (document.body.clientWidth - windowWidth) / 2,
+        y: (availableHeight - windowHeight) / 2 + topBarElementHeight,
+      };
+    } else if (defaultPosition && typeof defaultPosition === 'object') {
+      return defaultPosition;
+    } else {
+      // 默认随机位置
+      return {
+        x: ((3 / 2) * document.body.clientWidth + randX) / 2,
+        y: (100 + randY) / 2,
+      };
+    }
+  }, [defaultPosition, width, height, randX, randY]);
+
+  // 获取保存的窗口状态，如果没有则使用默认值
+  const savedState = windowStates[appID];
+  const [windowSize, setWindowSize] = useState<WindowSize>(() => 
+    savedState ? { width: savedState.width, height: savedState.height } : { width, height }
+  );
+  const [windowPosition, setWindowPosition] = useState<WindowPosition>(() =>
+    savedState ? { x: savedState.x, y: savedState.y } : getDefaultPosition
+  );
+
+  // 当窗口状态从store恢复时，更新本地state
+  useEffect(() => {
+    if (savedState) {
+      setWindowSize({ width: savedState.width, height: savedState.height });
+      setWindowPosition({ x: savedState.x, y: savedState.y });
+    }
+  }, [savedState]);
+
+  // 保存窗口状态到store
+  const saveWindowState = (newSize: WindowSize, newPosition: WindowPosition) => {
+    setWindowStates((prev) => {
+      prev[appID] = {
+        x: newPosition.x,
+        y: newPosition.y,
+        width: newSize.width,
+        height: newSize.height,
+      };
+      return prev;
+    });
+  };
+
   // 如果配置了打开时最大化，在窗口挂载后自动最大化
   const maximizedOnMountRef = useRef(false);
   useEffect(() => {
@@ -159,39 +217,11 @@ export const Window = ({ appID }: WindowProps) => {
     return null;
   }
 
-  // 计算默认位置
-  const getDefaultPosition = useMemo(() => {
-    if (defaultPosition === 'center') {
-      const dockElementHeight = document.getElementById('dock')?.clientHeight ?? 0;
-      const topBarElementHeight = document.getElementById('top-bar')?.clientHeight ?? 0;
-      const availableHeight = document.body.clientHeight - dockElementHeight - topBarElementHeight;
-      const windowWidth = typeof width === 'number' ? width : parseInt(String(width), 10);
-      const windowHeight = typeof height === 'number' ? height : parseInt(String(height), 10);
-      
-      return {
-        x: (document.body.clientWidth - windowWidth) / 2,
-        y: (availableHeight - windowHeight) / 2 + topBarElementHeight,
-      };
-    } else if (defaultPosition && typeof defaultPosition === 'object') {
-      return defaultPosition;
-    } else {
-      // 默认随机位置
-      return {
-        x: ((3 / 2) * document.body.clientWidth + randX) / 2,
-        y: (100 + randY) / 2,
-      };
-    }
-  }, [defaultPosition, width, height, randX, randY]);
-
   return (
     <Rnd
       ref={windowRef}
-      default={{
-        height,
-        width,
-        x: getDefaultPosition.x,
-        y: getDefaultPosition.y,
-      }}
+      size={windowSize}
+      position={windowPosition}
       enableResizing={resizable}
       dragHandleClassName="app-window-drag-handle"
       bounds="parent"
@@ -202,8 +232,21 @@ export const Window = ({ appID }: WindowProps) => {
         focusCurrentApp();
         setIsBeingDragged(true);
       }}
-      onDragStop={() => {
+      onDragStop={(e, d) => {
         setIsBeingDragged(false);
+        const newPosition = { x: d.x, y: d.y };
+        setWindowPosition(newPosition);
+        saveWindowState(windowSize, newPosition);
+      }}
+      onResizeStop={(e, direction, ref, delta, position) => {
+        const newSize = {
+          width: ref.offsetWidth,
+          height: ref.offsetHeight,
+        };
+        const newPosition = { x: position.x, y: position.y };
+        setWindowSize(newSize);
+        setWindowPosition(newPosition);
+        saveWindowState(newSize, newPosition);
       }}
     >
       <section className={css.container} tabIndex={-1} ref={containerRef} onClick={focusCurrentApp}>
@@ -241,7 +284,13 @@ function extractPositionFromTransformStyle(transformStyle: string): WindowPositi
   }
 }
 
-const useMaximizeWindow = (windowRef: RefObject<WindowRnd>) => {
+const useMaximizeWindow = (
+  windowRef: RefObject<WindowRnd>,
+  appID: AppID,
+  setWindowStates: (updater: (prev: Partial<Record<AppID, WindowState>>) => void) => void,
+  setWindowSize: (size: WindowSize) => void,
+  setWindowPosition: (position: WindowPosition) => void,
+) => {
   const originalSizeRef = useRef<WindowSize>({ height: 0, width: 0 });
   const originalPositionRef = useRef<WindowPosition>({
     x: 0,
@@ -284,24 +333,54 @@ const useMaximizeWindow = (windowRef: RefObject<WindowRnd>) => {
       transitionClearanceRef.current = 0;
     }, 300);
 
+    // 使用容差判断是否已最大化（允许1像素的误差）
+    const tolerance = 1;
+    const isMaximized = 
+      Math.abs(windowWidth - deskTopWidth) <= tolerance && 
+      Math.abs(windowHeight - desktopHeight) <= tolerance &&
+      Math.abs(windowTop - 0) <= tolerance;
+
     // When it's already maximized, revert the window to the previous size
-    if (windowWidth === deskTopWidth && windowHeight === desktopHeight) {
-      windowRef.current.updateSize(originalSizeRef.current);
-      windowRef.current.updatePosition(originalPositionRef.current);
+    if (isMaximized) {
+      const restoredSize = originalSizeRef.current;
+      const restoredPosition = originalPositionRef.current;
+      windowRef.current.updateSize(restoredSize);
+      windowRef.current.updatePosition(restoredPosition);
+      setWindowSize(restoredSize);
+      setWindowPosition(restoredPosition);
+      setWindowStates((prev) => {
+        prev[appID] = {
+          x: restoredPosition.x,
+          y: restoredPosition.y,
+          width: restoredSize.width,
+          height: restoredSize.height,
+        };
+        return prev;
+      });
     }
     // Maximize the window to the size of the desktop
     else {
       originalSizeRef.current = { width: windowWidth, height: windowHeight };
       originalPositionRef.current = { x: windowLeft, y: windowTop };
 
-      windowRef.current.updateSize({
+      const maximizedSize = {
         height: desktopHeight,
         width: deskTopWidth,
-      });
+      };
+      const maximizedPosition = { x: 0, y: 0 };
 
-      windowRef.current.updatePosition({
-        x: document.body.clientWidth / 2,
-        y: 0,
+      windowRef.current.updateSize(maximizedSize);
+      windowRef.current.updatePosition(maximizedPosition);
+      setWindowSize(maximizedSize);
+      setWindowPosition(maximizedPosition);
+      setWindowStates((prev) => {
+        prev[appID] = {
+          x: maximizedPosition.x,
+          y: maximizedPosition.y,
+          width: maximizedSize.width,
+          height: maximizedSize.height,
+        };
+        return prev;
       });
     }
   };
