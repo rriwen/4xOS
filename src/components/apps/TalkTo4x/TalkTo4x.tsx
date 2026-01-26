@@ -165,12 +165,14 @@ const TalkTo4x = () => {
     });
     
     // 先分配最高的z-index（在打开窗口之前）
-    const newZIndex = globalZIndexCounter + 1;
-    setGlobalZIndexCounter(newZIndex);
-    setWindowZIndices((prev) => ({
-      ...prev,
-      'safari': newZIndex,
-    }));
+    setGlobalZIndexCounter((current) => {
+      const newZIndex = current + 1;
+      setWindowZIndices((prev) => ({
+        ...prev,
+        'safari': newZIndex,
+      }));
+      return newZIndex;
+    });
     
     // 打开应用
     setOpenApps((apps) => {
@@ -182,20 +184,26 @@ const TalkTo4x = () => {
     setActiveApp('safari');
 
     // 使用双重 requestAnimationFrame 确保在窗口渲染后更新 z-index
+    // 这样可以确保窗口在渲染完成后获得最高的 z-index
     requestAnimationFrame(() => {
       requestAnimationFrame(() => {
         // 确保 z-index 是最高的
         setGlobalZIndexCounter((current) => {
-          const finalZIndex = Math.max(current + 1, newZIndex + 1);
-          setWindowZIndices((prev) => ({
-            ...prev,
-            'safari': finalZIndex,
-          }));
+          const finalZIndex = current + 1;
+          let maxZIndex = finalZIndex;
+          setWindowZIndices((prev) => {
+            const currentZIndex = prev['safari'] || 0;
+            maxZIndex = Math.max(finalZIndex, currentZIndex + 1);
+            return {
+              ...prev,
+              'safari': maxZIndex,
+            };
+          });
           
           // 直接更新 DOM 的 z-index，确保窗口在最上层
           const safariWindow = document.querySelector(`[data-app-id="safari"]`) as HTMLElement;
           if (safariWindow) {
-            safariWindow.style.zIndex = `${finalZIndex}`;
+            safariWindow.style.zIndex = `${maxZIndex}`;
           }
           
           return finalZIndex;
