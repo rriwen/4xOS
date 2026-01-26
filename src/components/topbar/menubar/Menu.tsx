@@ -1,7 +1,7 @@
 import { useAtom } from 'jotai';
-import { useImmerAtom } from 'jotai/immer';
+import { useImmerAtom } from 'jotai-immer';
 import clsx from 'clsx';
-import { useRef } from 'preact/hooks';
+import { useRef } from 'react';
 import { RovingTabIndexProvider, useFocusEffect, useRovingTabIndex } from 'react-roving-tabindex';
 import { activeAppStore, openAppsStore } from '__/stores/apps.store';
 import { activeMenuStore } from '__/stores/menubar.store';
@@ -22,18 +22,18 @@ export const Menu = ({ menu }: MenuProps) => {
   };
 
   return (
-    <div class={css.container} tabIndex={-1}>
+    <div className={css.container} tabIndex={-1}>
       <RovingTabIndexProvider options={{ direction: 'vertical', loopAround: true }}>
         {Object.keys<string>(menu).map((key) => (
           <div key={key}>
             <MenuItemButton
-              class={clsx(css.menuItem, menu[key].disabled && css.disabled)}
+              className={clsx(css.menuItem, menu[key].disabled && css.disabled)}
               disabled={menu[key].disabled}
               onClick={() => handleMenuItemClick(key)}
             >
               {menu[key].title}
             </MenuItemButton>
-            {menu[key].breakAfter && <div class={css.divider} />}
+            {menu[key].breakAfter && <div className={css.divider} />}
           </div>
         ))}
       </RovingTabIndexProvider>
@@ -45,10 +45,10 @@ type MenuItemButtonProps = {
   children: any;
   disabled?: boolean;
   onClick?: () => void;
-  class?: string;
+  className?: string;
 };
 
-const MenuItemButton = ({ children, disabled = false, onClick, class: className, ...props }: MenuItemButtonProps) => {
+const MenuItemButton = ({ children, disabled = false, onClick, className, ...props }: MenuItemButtonProps) => {
   const ref = useRef<HTMLButtonElement>();
 
   const [tabIndex, focused, handleKeyDown, handleRovingClick] = useRovingTabIndex(ref, disabled);
@@ -66,7 +66,7 @@ const MenuItemButton = ({ children, disabled = false, onClick, class: className,
       ref={ref}
       onKeyDown={handleKeyDown}
       onClick={handleClick as any}
-      class={className}
+      className={className}
       disabled={disabled}
       {...props}
     >

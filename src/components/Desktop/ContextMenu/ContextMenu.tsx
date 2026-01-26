@@ -1,5 +1,5 @@
-import { ComponentChildren, RefObject } from 'preact';
-import { useEffect, useRef } from 'preact/hooks';
+import { ReactNode, RefObject } from 'react';
+import { useEffect, useRef } from 'react';
 import { RovingTabIndexProvider, useFocusEffect, useRovingTabIndex } from 'react-roving-tabindex';
 import { contextMenuConfig } from '__/data/menu/context.menu.config';
 import { useContextMenu, useFocusOutside } from '__/hooks';
@@ -37,7 +37,7 @@ export const ContextMenu = ({ outerRef }: Props) => {
     <>
       {isMenuVisible ? (
         <div
-          class={css.contextContainer}
+          className={css.contextContainer}
           tabIndex={-1}
           ref={containerRef}
         >
@@ -47,7 +47,7 @@ export const ContextMenu = ({ outerRef }: Props) => {
                 <ContextMenuButton onClick={() => handleMenuClick(key)}>
                   {defMenu[key].title}
                 </ContextMenuButton>
-                {(defMenu[key] as any).breakAfter && <div class={css.divider}></div>}
+                {(defMenu[key] as any).breakAfter && <div className={css.divider}></div>}
               </>
             ))}
           </RovingTabIndexProvider>
@@ -60,7 +60,7 @@ export const ContextMenu = ({ outerRef }: Props) => {
 };
 
 type ContextMenuButtonProps = {
-  children: ComponentChildren;
+  children: ReactNode;
   onClick?: () => void;
 };
 
@@ -82,7 +82,7 @@ const ContextMenuButton = ({ children, onClick }: ContextMenuButtonProps) => {
       onClick={handleClick}
       tabIndex={tabIndex}
       ref={ref}
-      class={css.menuItem}
+      className={css.menuItem}
     >
       {children}
     </button>

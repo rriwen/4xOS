@@ -1,9 +1,9 @@
 import useRaf from '@rooks/use-raf';
 import { motion, MotionValue, useMotionValue, useSpring, useTransform } from 'framer-motion';
 import { useAtom } from 'jotai';
-import { useImmerAtom } from 'jotai/immer';
-import { RefObject } from 'preact';
-import { useRef, useState } from 'preact/hooks';
+import { useImmerAtom } from 'jotai-immer';
+import { RefObject } from 'react';
+import { useRef, useState } from 'react';
 import { AppConfig } from '__/helpers/create-app-config';
 import {
   activeAppStore,
@@ -58,8 +58,8 @@ export function DockItem({
   }
 
   return (
-    <button class={css.dockItemButton} aria-label={`Launch ${title}`} onClick={openApp}>
-      <p class={css.tooltip}>{title}</p>
+    <button className={css.dockItemButton} aria-label={`Launch ${title}`} onClick={openApp}>
+      <p className={css.tooltip}>{title}</p>
       <motion.span
         onTap={() => setAnimateObj({ translateY: ['0%', '-39.2%', '0%'] })}
         initial={false}
@@ -75,7 +75,7 @@ export function DockItem({
           alt={`${title} app icon`}
         />
       </motion.span>
-      <div class={css.dot} style={{ '--opacity': +isOpen } as React.CSSProperties} />
+      <div className={css.dot} style={{ '--opacity': +isOpen } as React.CSSProperties} />
     </button>
   );
 }

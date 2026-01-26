@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 import { useAtom } from 'jotai';
-import { RefObject } from 'preact';
-import { useEffect, useMemo, useRef, useState } from 'preact/hooks';
+import { RefObject } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { Suspense } from 'react';
 import { Rnd } from 'react-rnd';
 import { AppNexus } from '__/components/apps/AppNexus';
@@ -206,15 +206,15 @@ export const Window = ({ appID }: WindowProps) => {
         setIsBeingDragged(false);
       }}
     >
-      <section class={css.container} tabIndex={-1} ref={containerRef} onClick={focusCurrentApp}>
+      <section className={css.container} tabIndex={-1} ref={containerRef} onClick={focusCurrentApp}>
         <div
           style={trafficLightsStyle}
-          class={clsx(css.trafficLightsContainer, 'app-window-drag-handle')}
+          className={clsx(css.trafficLightsContainer, 'app-window-drag-handle')}
         >
           <TrafficLights appID={appID} onMaximizeClick={maximizeApp} onActivate={focusCurrentApp} />
         </div>
-        <div class={clsx(css.titleBar, 'app-window-drag-handle')}>
-          <span class={css.title}>{appsConfig[appID].title}</span>
+        <div className={clsx(css.titleBar, 'app-window-drag-handle')}>
+          <span className={css.title}>{appsConfig[appID].title}</span>
         </div>
         <Suspense fallback={<span></span>}>
           <AppNexus appID={appID} isBeingDragged={isBeingDragged} />

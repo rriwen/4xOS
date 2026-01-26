@@ -24,69 +24,69 @@ const Calculator = () => {
   }
 
   return (
-    <section class={css.container}>
-      <header class={clsx('app-window-drag-handle', css.header)} />
-      <section class={css.showArea}>{result}</section>
-      <section class={css.buttonsContainer}>
-        <button class={css.topRowButton} onClick={() => handlePress('AC')}>
+    <section className={css.container}>
+      <header className={clsx('app-window-drag-handle', css.header)} />
+      <section className={css.showArea}>{result}</section>
+      <section className={css.buttonsContainer}>
+        <button className={css.topRowButton} onClick={() => handlePress('AC')}>
           {Number(result) > 0 ? 'C' : 'AC'}
         </button>
-        <button class={css.topRowButton} onClick={() => handlePress('+/-')}>
+        <button className={css.topRowButton} onClick={() => handlePress('+/-')}>
           <AppIcon path={mdiPlusMinusVariant} />
         </button>
-        <button class={css.topRowButton} onClick={() => handlePress('%')}>
+        <button className={css.topRowButton} onClick={() => handlePress('%')}>
           <AppIcon path={mdiPercentOutline} />
         </button>
-        <button class={css.operationButton} onClick={() => handlePress('/')}>
+        <button className={css.operationButton} onClick={() => handlePress('/')}>
           <AppIcon path={mdiDivision} />
         </button>
-        <button class={css.numberButton} onClick={() => handlePress(7)}>
+        <button className={css.numberButton} onClick={() => handlePress(7)}>
           7
         </button>
-        <button class={css.numberButton} onClick={() => handlePress(8)}>
+        <button className={css.numberButton} onClick={() => handlePress(8)}>
           8
         </button>
-        <button class={css.numberButton} onClick={() => handlePress(9)}>
+        <button className={css.numberButton} onClick={() => handlePress(9)}>
           9
         </button>
-        <button class={css.operationButton} onClick={() => handlePress('*')}>
+        <button className={css.operationButton} onClick={() => handlePress('*')}>
           <AppIcon path={mdiClose} />
         </button>
-        <button class={css.numberButton} onClick={() => handlePress(4)}>
+        <button className={css.numberButton} onClick={() => handlePress(4)}>
           4
         </button>
-        <button class={css.numberButton} onClick={() => handlePress(5)}>
+        <button className={css.numberButton} onClick={() => handlePress(5)}>
           5
         </button>
-        <button class={css.numberButton} onClick={() => handlePress(6)}>
+        <button className={css.numberButton} onClick={() => handlePress(6)}>
           6
         </button>
-        <button class={css.operationButton} onClick={() => handlePress('-')}>
+        <button className={css.operationButton} onClick={() => handlePress('-')}>
           <AppIcon path={mdiMinus} size={24} />
         </button>
-        <button class={css.numberButton} onClick={() => handlePress(1)}>
+        <button className={css.numberButton} onClick={() => handlePress(1)}>
           1
         </button>
-        <button class={css.numberButton} onClick={() => handlePress(2)}>
+        <button className={css.numberButton} onClick={() => handlePress(2)}>
           2
         </button>
-        <button class={css.numberButton} onClick={() => handlePress(3)}>
+        <button className={css.numberButton} onClick={() => handlePress(3)}>
           3
         </button>
-        <button class={css.operationButton} onClick={() => handlePress('+')}>
+        <button className={css.operationButton} onClick={() => handlePress('+')}>
           +
         </button>
         <button
-          class={clsx(css.numberButton, css.curvedBottomLeftButton, css.zeroButton)}
+          className={clsx(css.numberButton, css.curvedBottomLeftButton, css.zeroButton)}
           onClick={() => handlePress(0)}
         >
           0
         </button>
-        <button class={css.numberButton} onClick={() => handlePress('.')}>
+        <button className={css.numberButton} onClick={() => handlePress('.')}>
           .
         </button>
         <button
-          class={clsx(css.operationButton, css.curvedBottomRightButton)}
+          className={clsx(css.operationButton, css.curvedBottomRightButton)}
           onClick={() => handlePress('=')}
         >
           =

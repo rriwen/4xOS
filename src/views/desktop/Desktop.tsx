@@ -1,18 +1,20 @@
 import { useAtom } from 'jotai';
-import { useImmerAtom } from 'jotai/immer';
-import { useEffect, useRef, useState } from 'preact/hooks';
+import { useImmerAtom } from 'jotai-immer';
+import { lazy, Suspense, useEffect, useRef, useState } from 'react';
 import { ContextMenu } from '__/components/Desktop/ContextMenu/ContextMenu';
 import { StartupChime } from '__/components/Desktop/StartupChime';
 import { WindowsArea } from '__/components/Desktop/Window/WindowsArea';
-import { Dock } from '__/components/dock/Dock';
-import { TopBar } from '__/components/topbar/TopBar';
 import { activeAppStore, openAppsStore } from '__/stores/apps.store';
 import { themeAtom } from '__/stores/theme.store';
 import css from './Desktop.module.scss';
 
+// 懒加载非关键组件
+const TopBar = lazy(() => import('__/components/topbar/TopBar').then(m => ({ default: m.TopBar })));
+const Dock = lazy(() => import('__/components/dock/Dock').then(m => ({ default: m.Dock })));
+
 export const Desktop = () => {
-  const outerRef = useRef<HTMLDivElement>();
-  const backgroundRef = useRef<HTMLDivElement>();
+  const outerRef = useRef<HTMLDivElement>(null);
+  const backgroundRef = useRef<HTMLDivElement>(null);
   const [, setOpenApps] = useImmerAtom(openAppsStore);
   const [, setActiveApp] = useAtom(activeAppStore);
   const [theme] = useAtom(themeAtom);
@@ -20,12 +22,12 @@ export const Desktop = () => {
 
   // 在页面加载时自动打开 "talk to 4x" 应用
   useEffect(() => {
-    setOpenApps((apps) => {
+    setOpenApps((apps: Record<string, boolean>) => {
       apps['talk-to-4x'] = true;
       return apps;
     });
     setActiveApp('talk-to-4x');
-  }, []);
+  }, [setOpenApps, setActiveApp]);
 
   // 预加载壁纸
   useEffect(() => {
@@ -67,18 +69,22 @@ export const Desktop = () => {
 
   return (
     <div>
-      <main ref={outerRef} class={css.main}>
-        <ContextMenu outerRef={outerRef} />
-        <TopBar />
+      <main ref={outerRef} className={css.main}>
+        <ContextMenu outerRef={outerRef as React.RefObject<HTMLDivElement>} />
+        <Suspense fallback={null}>
+          <TopBar />
+        </Suspense>
         <WindowsArea />
-        <Dock />
+        <Suspense fallback={null}>
+          <Dock />
+        </Suspense>
       </main>
 
       <StartupChime />
 
       <div 
         ref={backgroundRef} 
-        class={css.backgroundCover} 
+        className={css.backgroundCover} 
         aria-hidden="true"
         style={{ opacity: wallpaperLoaded ? 1 : 0 }}
       />

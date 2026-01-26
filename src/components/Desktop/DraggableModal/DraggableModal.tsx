@@ -1,5 +1,4 @@
-import { ComponentChildren } from 'preact';
-import { useRef, useState } from 'preact/hooks';
+import { ReactNode, useRef, useState } from 'react';
 import { Rnd } from 'react-rnd';
 import css from './DraggableModal.module.scss';
 
@@ -7,7 +6,7 @@ type DraggableModalProps = {
   /**
    * 弹窗内容
    */
-  children: ComponentChildren;
+  children: ReactNode;
   
   /**
    * 是否显示弹窗
@@ -118,7 +117,7 @@ export const DraggableModal = ({
   };
 
   return (
-    <div class={css.overlay} onClick={onClose}>
+    <div className={css.overlay} onClick={onClose}>
       <Rnd
         default={{
           ...getInitialPosition(),
@@ -136,16 +135,16 @@ export const DraggableModal = ({
       >
         <div
           ref={modalRef}
-          class={`${css.modal} ${className || ''}`}
+          className={`${css.modal} ${className || ''}`}
           onClick={(e) => e.stopPropagation()}
         >
           {/* 标题栏 - 可拖拽区域 */}
           {(title || showCloseButton) && (
-            <div class={`${css.header} draggable-modal-header`}>
-              {title && <h2 class={css.title}>{title}</h2>}
+            <div className={`${css.header} draggable-modal-header`}>
+              {title && <h2 className={css.title}>{title}</h2>}
               {showCloseButton && onClose && (
                 <button
-                  class={`${css.closeButton} draggable-modal-close-button`}
+                  className={`${css.closeButton} draggable-modal-close-button`}
                   onClick={onClose}
                   aria-label="关闭"
                 >
@@ -156,7 +155,7 @@ export const DraggableModal = ({
           )}
 
           {/* 内容区域 */}
-          <div class={css.content}>{children}</div>
+          <div className={css.content}>{children}</div>
         </div>
       </Rnd>
     </div>

@@ -1,6 +1,6 @@
 import clsx from 'clsx';
 import { useAtom } from 'jotai';
-import { useRef } from 'preact/hooks';
+import { useRef } from 'react';
 import { useFocusOutside, useOutsideClick } from '__/hooks';
 import { activeMenuStore, menuBarMenusStore } from '__/stores/menubar.store';
 import { Menu } from './Menu';
@@ -19,15 +19,15 @@ export const MenuBar = () => {
   useOutsideClick(parentRef, () => setActiveMenu(''));
 
   return (
-    <div class={css.container} ref={parentRef}>
+    <div className={css.container} ref={parentRef}>
       {Object.keys(currentAppMenus).map((menuID) => (
         <div key={menuID}>
-          <span class={css.menuItemWrapper}>
+          <span className={css.menuItemWrapper}>
             <button
               onClick={() => setActiveMenu(menuID)}
               onMouseOver={() => activeMenu && setActiveMenu(menuID)}
               onFocus={() => setActiveMenu(menuID)}
-              class={clsx({
+              className={clsx({
                 [css.menuButton]: true,
                 [css.defaultMenu]: menuID === 'default',
                 [css.appleIconButton]: menuID === 'apple',
@@ -44,7 +44,7 @@ export const MenuBar = () => {
             </button>
           </span>
           <div
-            class={css.menuParent}
+            className={css.menuParent}
             data-visible={activeMenu === menuID ? 'true' : 'false'}
           >
             <Menu menu={currentAppMenus[menuID].menu} />

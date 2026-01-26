@@ -1,9 +1,9 @@
-import { ComponentChildren } from 'preact';
+import { ReactNode } from 'react';
 import css from './ActionCenterSurface.module.scss';
 
 interface ActionCenterSurfaceProps {
   grid: [[columnStart: number, columnSpan: number], [rowStart: number, rowSpan: number]];
-  children: ComponentChildren;
+  children: ReactNode;
 }
 
 export const ActionCenterSurface = ({ grid, children }: ActionCenterSurfaceProps) => {
@@ -11,7 +11,7 @@ export const ActionCenterSurface = ({ grid, children }: ActionCenterSurfaceProps
 
   return (
     <section
-      class={css.container}
+      className={css.container}
       style={
         {
           '--column-start': columnStart,

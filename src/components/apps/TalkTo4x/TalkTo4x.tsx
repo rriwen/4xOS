@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 import { useAtom } from 'jotai';
-import { useImmerAtom } from 'jotai/immer';
-import { useState, useRef, useEffect } from 'preact/hooks';
+import { useImmerAtom } from 'jotai-immer';
+import { useState, useRef, useEffect } from 'react';
 import { fetchAndParseResume } from '__/helpers/parse-resume';
 import type { ResumeData } from '__/helpers/parse-resume';
 import { activeAppStore, minimizedAppsStore, openAppsStore } from '__/stores/apps.store';
@@ -466,20 +466,20 @@ const TalkTo4x = () => {
   };
 
   return (
-    <div class={css.content}>
+    <div className={css.content}>
       {/* 可拖拽的标题栏区域 */}
-      <header class={clsx('app-window-drag-handle', css.titleBar)} />
-      <div class={css.messagesContainer}>
+      <header className={clsx('app-window-drag-handle', css.titleBar)} />
+      <div className={css.messagesContainer}>
         {messages.map((message, index) => (
           <div
             key={index}
-            class={clsx(css.messageWrapper, message.role === 'user' ? css.userWrapper : css.assistantWrapper)}
+            className={clsx(css.messageWrapper, message.role === 'user' ? css.userWrapper : css.assistantWrapper)}
           >
-            <div class={clsx(css.message, message.role === 'user' ? css.userMessage : css.assistantMessage)}>
-              <div class={css.messageContent}>
-                <span class={css.messageText}>{message.content}</span>
+            <div className={clsx(css.message, message.role === 'user' ? css.userMessage : css.assistantMessage)}>
+              <div className={css.messageContent}>
+                <span className={css.messageText}>{message.content}</span>
                 {message.role === 'assistant' && message.hasResumeLink && (
-                  <button class={css.resumeLinkButton} onClick={openSafari}>
+                  <button className={css.resumeLinkButton} onClick={openSafari}>
                     查看 4x 的简历
                   </button>
                 )}
@@ -488,10 +488,10 @@ const TalkTo4x = () => {
           </div>
         ))}
         {isLoading && (
-          <div class={clsx(css.messageWrapper, css.assistantWrapper)}>
-            <div class={clsx(css.message, css.assistantMessage)}>
-              <div class={css.messageContent}>
-                <div class={css.loadingAnimation}>
+          <div className={clsx(css.messageWrapper, css.assistantWrapper)}>
+            <div className={clsx(css.message, css.assistantMessage)}>
+              <div className={css.messageContent}>
+                <div className={css.loadingAnimation}>
                   <span></span>
                   <span></span>
                   <span></span>
@@ -501,18 +501,18 @@ const TalkTo4x = () => {
           </div>
         )}
         {error && (
-          <div class={css.errorMessage}>
+          <div className={css.errorMessage}>
             <span>⚠️ {error}</span>
           </div>
         )}
         <div ref={messagesEndRef} />
       </div>
-      <div class={css.inputContainer}>
-        <div class={css.quickQuestions}>
+      <div className={css.inputContainer}>
+        <div className={css.quickQuestions}>
           {quickQuestions.map((question, index) => (
             <button
               key={index}
-              class={css.quickQuestionButton}
+              className={css.quickQuestionButton}
               onClick={() => handleQuickQuestion(question)}
               disabled={isLoading}
             >
@@ -520,10 +520,10 @@ const TalkTo4x = () => {
             </button>
           ))}
         </div>
-        <div class={css.inputWrapper}>
+        <div className={css.inputWrapper}>
           <textarea
             ref={inputRef}
-            class={css.input}
+            className={css.input}
             value={inputValue}
             onInput={(e) => setInputValue((e.target as HTMLTextAreaElement).value)}
             onKeyDown={handleKeyPress}
@@ -532,7 +532,7 @@ const TalkTo4x = () => {
             rows={1}
           />
           <button
-            class={clsx(css.sendButton, isLoading && css.sendButtonDisabled)}
+            className={clsx(css.sendButton, isLoading && css.sendButtonDisabled)}
             onClick={sendMessage}
             disabled={isLoading || !inputValue.trim()}
             aria-label="发送消息"

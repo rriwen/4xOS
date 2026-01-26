@@ -1,7 +1,8 @@
-import { FC } from 'preact/compat';
+import { FC, ReactNode } from 'react';
 
 type IDockTooltip = {
   label: string;
+  children?: ReactNode;
 };
 
 export const DockTooltip: FC<IDockTooltip> = ({ label, children }) => {

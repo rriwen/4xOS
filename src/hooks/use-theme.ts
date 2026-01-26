@@ -1,5 +1,5 @@
 import { useAtom } from 'jotai';
-import { useEffect } from 'preact/hooks';
+import { useEffect } from 'react';
 import { themeAtom } from '__/stores/theme.store';
 
 /**

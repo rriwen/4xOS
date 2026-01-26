@@ -2,8 +2,8 @@ import { mdiChevronLeft, mdiChevronRight } from '@mdi/js';
 import clsx from 'clsx';
 import { addMonths, format } from 'date-fns';
 import { useAtom } from 'jotai';
-import { lazy } from 'preact/compat';
-import { useState } from 'preact/hooks';
+import { lazy } from 'react';
+import { useState } from 'react';
 import { Suspense } from 'react';
 import { AppIcon } from '__/components/utils/AppIcon';
 import { calendarAppStore } from '__/stores/calendar.app.store';
@@ -33,10 +33,10 @@ const Calendar = () => {
   };
 
   return (
-    <section class={css.container}>
-      <header class={clsx('app-window-drag-handle', css.titleBar)}></header>
+    <section className={css.container}>
+      <header className={clsx('app-window-drag-handle', css.titleBar)}></header>
 
-      <section class={css.mainArea}>
+      <section className={css.mainArea}>
         <div className={css.calendarHeader}>
           <div>
             <span className={css.month}>{format(selectedDate, 'MMMM')}</span>{' '}

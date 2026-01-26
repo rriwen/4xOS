@@ -1,9 +1,8 @@
-import { ComponentChildren } from 'preact';
-import { useEffect, useRef } from 'preact/hooks';
+import { ReactNode, useEffect, useRef } from 'react';
 import css from './ActionCenterShell.module.scss';
 
 type MenuShellProps = {
-  children: ComponentChildren;
+  children: ReactNode;
 };
 
 export const ActionCenterShell = ({ children }: MenuShellProps) => {
@@ -14,7 +13,7 @@ export const ActionCenterShell = ({ children }: MenuShellProps) => {
   }, []);
 
   return (
-    <section class={css.container} ref={ref} tabIndex={-1}>
+    <section className={css.container} ref={ref} tabIndex={-1}>
       {children}
     </section>
   );

@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import { useState, useCallback, useEffect, useRef } from 'preact/hooks';
+import { useState, useCallback, useEffect, useRef } from 'react';
 import { useTheme } from '__/hooks';
 import css from './Safari.module.scss';
 
@@ -100,17 +100,17 @@ const Safari = () => {
   };
 
   return (
-    <section class={css.container}>
-      <div class={clsx('app-window-drag-handle', css.tabsBar)}>
+    <section className={css.container}>
+      <div className={clsx('app-window-drag-handle', css.tabsBar)}>
         {tabs.map((tab) => (
           <div
             key={tab.id}
-            class={clsx(css.tab, tab.id === activeTabId && css.activeTab)}
+            className={clsx(css.tab, tab.id === activeTabId && css.activeTab)}
             onClick={(e) => switchTab(tab.id, e)}
           >
-            <span class={css.tabTitle}>{getTabTitle(tab)}</span>
+            <span className={css.tabTitle}>{getTabTitle(tab)}</span>
             <button
-              class={css.closeButton}
+              className={css.closeButton}
               onClick={(e) => closeTab(tab.id, e)}
               aria-label="关闭标签页"
             >
@@ -119,17 +119,17 @@ const Safari = () => {
           </div>
         ))}
       </div>
-      <div class={css.content}>
-        <div class={css.placeholderText}>Coming Soon！</div>
+      <div className={css.content}>
+        <div className={css.placeholderText}>Coming Soon！</div>
         {tabs.map((tab) => (
           tab.url === 'coming-soon' ? (
             <div
               key={tab.id}
-              class={clsx(css.comingSoon, tab.id === activeTabId && css.activeIframe)}
+              className={clsx(css.comingSoon, tab.id === activeTabId && css.activeIframe)}
             >
-              <div class={css.comingSoonContent}>
-                <h1 class={css.comingSoonTitle}>Coming Soon!</h1>
-                <p class={css.comingSoonText}>网站正在建设中...</p>
+              <div className={css.comingSoonContent}>
+                <h1 className={css.comingSoonTitle}>Coming Soon!</h1>
+                <p className={css.comingSoonText}>网站正在建设中...</p>
               </div>
             </div>
           ) : (
@@ -147,7 +147,7 @@ const Safari = () => {
                 }
               }}
               src={`${tab.url}${tab.url.includes('?') ? '&' : '?'}theme=${theme}`}
-              class={clsx(css.iframe, tab.id === activeTabId && css.activeIframe)}
+              className={clsx(css.iframe, tab.id === activeTabId && css.activeIframe)}
               title={getTabTitle(tab)}
               sandbox="allow-same-origin allow-scripts allow-forms allow-popups"
             />

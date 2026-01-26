@@ -25,7 +25,7 @@ Thank you for your attention
 */
 
 import { mdiBluetooth, mdiKeyboard, mdiWifiStrength4 } from '@mdi/js';
-import { FC } from 'preact/compat';
+import { FC } from 'react';
 import { AirDropSVG } from '__/assets/sf-icons/AirDrop.svg';
 import { MoonSVG } from '__/assets/sf-icons/Moon.svg';
 import { AppIcon } from '__/components/utils/AppIcon';
@@ -44,7 +44,7 @@ export const ActionCenter = () => {
 
   return (
     <ActionCenterShell>
-      <section class={css.container}>
+      <section className={css.container}>
         {/* Main Controls: Wifi, Bluetooth, Airdrop */}
         <ActionCenterSurface
           grid={[
@@ -117,7 +117,7 @@ const Toggle: FC<{ filled: boolean } & JSX.IntrinsicElements['button']> = ({
   ...props
 }) => (
   <button
-    class={css.toggle}
+    className={css.toggle}
     style={
       {
         '--bgcolor': `var(--app-color-${filled ? 'primary' : 'dark'}-hsl)`,

@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import { useRef, useState } from 'preact/hooks';
+import { useRef, useState } from 'react';
 import { SwitchSVG } from '__/assets/sf-icons/switch.svg';
 import { useFocusOutside, useOutsideClick } from '__/hooks';
 import { TopBarIconButton } from '../TopBarIconButton';
@@ -17,13 +17,13 @@ export const ActionCenterToggle = () => {
   useFocusOutside(containerRef, hide);
 
   return (
-    <div class="container" ref={containerRef}>
+    <div className="container" ref={containerRef}>
       <span>
         <TopBarIconButton onClick={show} onFocus={show}>
           <SwitchSVG />
         </TopBarIconButton>
       </span>
-      <div class={clsx(css.menuParent, state === 'hidden' && css.hidden)}>
+      <div className={clsx(css.menuParent, state === 'hidden' && css.hidden)}>
         <ActionCenter />
       </div>
     </div>

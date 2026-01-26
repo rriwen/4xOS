@@ -1,13 +1,13 @@
 import { Provider } from 'jotai';
-import { render } from 'preact';
+import { createRoot } from 'react-dom/client';
 import './css/global.scss';
 import { Desktop } from './views/desktop/Desktop';
 
 // WOWOWOWOW
 
-render(
+const root = createRoot(document.getElementById('root')!);
+root.render(
   <Provider>
     <Desktop />
-  </Provider>,
-  document.getElementById('root')!,
+  </Provider>
 );

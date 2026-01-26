@@ -1,9 +1,9 @@
-import { ComponentChildren } from 'preact';
+import { ReactNode } from 'react';
 import css from './ActionCenterTile.module.scss';
 
 interface IActionCenterTileProps {
   grid: [rowStart: number, rowSpan: number];
-  children: ComponentChildren;
+  children: ReactNode;
 }
 
 export const ActionCenterTile = ({ grid, children }: IActionCenterTileProps) => {
@@ -11,7 +11,7 @@ export const ActionCenterTile = ({ grid, children }: IActionCenterTileProps) => 
 
   return (
     <div
-      class={css.container}
+      className={css.container}
       style={{ '--row-start': rowStart, '--row-span': rowsPan } as React.CSSProperties}
     >
       {children}

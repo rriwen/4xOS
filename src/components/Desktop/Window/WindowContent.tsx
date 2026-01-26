@@ -1,11 +1,11 @@
-import { ComponentChildren } from 'preact';
+import { ReactNode } from 'react';
 import css from './WindowContent.module.scss';
 
 type WindowContentProps = {
   /**
    * 窗口内容
    */
-  children: ComponentChildren;
+  children: ReactNode;
   
   /**
    * 自定义类名
@@ -41,7 +41,7 @@ export const WindowContent = ({
 }: WindowContentProps) => {
   return (
     <div 
-      class={`${css.windowContent} ${className || ''}`}
+      className={`${css.windowContent} ${className || ''}`}
       style={!padding ? { padding: 0 } : undefined}
     >
       {children}

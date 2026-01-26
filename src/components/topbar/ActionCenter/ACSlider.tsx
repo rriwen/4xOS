@@ -1,10 +1,10 @@
 import { Slider, SliderProps } from '@reach/slider';
 import clsx from 'clsx';
-import { FC } from 'preact/compat';
+import { FC } from 'react';
 import css from './ACSlider.module.scss';
 
 export const ACSlider: FC<SliderProps> = ({ children, ...props }) => {
-  return <Slider {...props} class={clsx({ [css.slider]: true })}></Slider>;
+  return <Slider {...props} className={clsx({ [css.slider]: true })}></Slider>;
 };
 
 // const pickTrackColor = (index: number) => ['white', 'transparent'][index];

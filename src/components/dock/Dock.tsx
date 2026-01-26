@@ -22,9 +22,9 @@ export const Dock = () => {
 
   // Hi
   return (
-    <section id="dock" class={css.container}>
+    <section id="dock" className={css.container}>
       <div
-        class={css.dockEl}
+        className={css.dockEl}
         onMouseMove={(event) => mouseX.set(event.nativeEvent.x)}
         onMouseLeave={() => mouseX.set(null)}
       >
@@ -32,7 +32,7 @@ export const Dock = () => {
           {dockAppIDs.map((appID, i) => (
             <div>
               {appsConfig[appID].dockBreaksBefore && (
-                <div class={css.divider} key={`${appID}-divider`} aria-hidden="true" />
+                <div className={css.divider} key={`${appID}-divider`} aria-hidden="true" />
               )}
               <DockItem
                 index={i}

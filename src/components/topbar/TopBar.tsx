@@ -5,10 +5,10 @@ import { TopBarTime } from './TopBarTime';
 
 export const TopBar = () => {
   return (
-    <header id="top-bar" class={css.header}>
+    <header id="top-bar" className={css.header}>
       <MenuBar />
 
-      <span class={css.spacer} />
+      <span className={css.spacer} />
 
       <ActionCenterToggle />
 

@@ -1,6 +1,6 @@
 import clsx from 'clsx';
 import { useAtom } from 'jotai';
-import { useImmerAtom } from 'jotai/immer';
+import { useImmerAtom } from 'jotai-immer';
 import { CloseIcon } from '__/assets/traffic-icons/Close.svg';
 import { GreenLightIcon } from '__/assets/traffic-icons/GreenLightIcon';
 import { MinimizeIcon } from '__/assets/traffic-icons/Minimize.svg';
@@ -84,11 +84,11 @@ export const TrafficLights = ({
 
   return (
     <div
-      class={clsx(css.container, !isActive && css.unFocussed, className)}
+      className={clsx(css.container, !isActive && css.unFocussed, className)}
       onClick={handleContainerClick}
     >
       <button
-        class={css.closeLight}
+        className={css.closeLight}
         onClick={(e) => {
           e.stopPropagation();
           closeApp();
@@ -97,7 +97,7 @@ export const TrafficLights = ({
         <CloseIcon />
       </button>
       <button
-        class={css.minimizeLight}
+        className={css.minimizeLight}
         onClick={(e) => {
           e.stopPropagation();
           minimizeApp();
@@ -106,7 +106,7 @@ export const TrafficLights = ({
         <MinimizeIcon />
       </button>
       <button
-        class={css.stretchLight}
+        className={css.stretchLight}
         onClick={(e) => {
           e.stopPropagation();
           greenLightAction();

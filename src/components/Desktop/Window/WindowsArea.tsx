@@ -1,6 +1,6 @@
 import { useAtom } from 'jotai';
-import { lazy } from 'preact/compat';
-import { useEffect, useRef } from 'preact/hooks';
+import { lazy } from 'react';
+import { useEffect, useRef } from 'react';
 import { Suspense } from 'react';
 import { appsConfig } from '__/data/apps/apps-config';
 import {
@@ -56,7 +56,7 @@ export const WindowsArea = () => {
   }, [activeApp, setActiveAppZIndex, openApps]); // 移除 windowZIndices 从依赖项，避免循环
 
   return (
-    <section class={css.container}>
+    <section className={css.container}>
       <Suspense fallback={<span></span>}>
         {Object.keys(appsConfig).map(
           (appID) =>
