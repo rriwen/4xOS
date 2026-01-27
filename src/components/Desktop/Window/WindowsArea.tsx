@@ -1,13 +1,8 @@
-import { useAtom, useAtomValue } from 'jotai';
+import { useAtom } from 'jotai';
 import { lazy } from 'react';
-import { useEffect, useRef } from 'react';
 import { Suspense } from 'react';
 import { appsConfig } from '__/data/apps/apps-config';
-import {
-  activeAppStore,
-  openAppsStore,
-  windowZIndexStore,
-} from '__/stores/apps.store';
+import { openAppsStore } from '__/stores/apps.store';
 import css from './WindowsArea.module.scss';
 
 const Window = lazy(() => import('./Window'));

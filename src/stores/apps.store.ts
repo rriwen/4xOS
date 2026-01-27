@@ -30,12 +30,6 @@ export const globalZIndexCounterStore = atom(100);
 export const windowZIndexStore = atom<Partial<Record<AppID, number>>>({});
 
 /**
- * Maximum zIndex for the active app (deprecated, kept for compatibility)
- * @deprecated Use globalZIndexCounterStore instead
- */
-export const activeAppZIndexStore = atom(98);
-
-/**
  * Store to track minimized state for each window
  * true = minimized, false/undefined = not minimized
  */

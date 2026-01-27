@@ -45,6 +45,15 @@ export const Desktop = () => {
     setActiveApp('talk-to-4x');
   }, [setOpenApps, setActiveApp, setWindowZIndices, setGlobalZIndexCounter]);
 
+  // 设置壁纸样式
+  const setWallpaperStyles = (wallpaperPath: string) => {
+    if (backgroundRef.current) {
+      backgroundRef.current.style.backgroundImage = `url(${wallpaperPath})`;
+      backgroundRef.current.style.opacity = '1';
+    }
+    setWallpaperLoaded(true);
+  };
+
   // 预加载壁纸
   useEffect(() => {
     const wallpaperPath = theme === 'dark' 
@@ -54,20 +63,15 @@ export const Desktop = () => {
     const img = new Image();
     
     img.onload = () => {
-      setWallpaperLoaded(true);
-      // 确保背景元素存在后再设置背景
-      if (backgroundRef.current) {
-        backgroundRef.current.style.backgroundImage = `url(${wallpaperPath})`;
-        backgroundRef.current.style.opacity = '1';
-      }
+      setWallpaperStyles(wallpaperPath);
     };
     
     img.onerror = () => {
       // 即使加载失败也显示，使用 CSS 中的默认背景
-      setWallpaperLoaded(true);
       if (backgroundRef.current) {
         backgroundRef.current.style.opacity = '1';
       }
+      setWallpaperLoaded(true);
     };
     
     // 开始加载图片
@@ -75,11 +79,7 @@ export const Desktop = () => {
     
     // 如果图片已经在缓存中，onload 可能不会触发，检查 complete 属性
     if (img.complete) {
-      setWallpaperLoaded(true);
-      if (backgroundRef.current) {
-        backgroundRef.current.style.backgroundImage = `url(${wallpaperPath})`;
-        backgroundRef.current.style.opacity = '1';
-      }
+      setWallpaperStyles(wallpaperPath);
     }
   }, [theme]);
 

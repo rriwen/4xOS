@@ -5,13 +5,12 @@ import { useImmerAtom } from 'jotai-immer';
 import { RefObject } from 'react';
 import { useRef, useState } from 'react';
 import { AppConfig } from '__/helpers/create-app-config';
+import { useAssignWindowZIndex } from '__/hooks/use-window-z-index';
 import {
   activeAppStore,
   AppID,
-  globalZIndexCounterStore,
   minimizedAppsStore,
   openAppsStore,
-  windowZIndexStore,
 } from '__/stores/apps.store';
 import css from './DockItem.module.scss';
 
@@ -33,8 +32,7 @@ export function DockItem({
   const [, setOpenApps] = useImmerAtom(openAppsStore);
   const [, setActiveApp] = useAtom(activeAppStore);
   const [, setMinimizedApps] = useImmerAtom(minimizedAppsStore);
-  const [windowZIndices, setWindowZIndices] = useAtom(windowZIndexStore);
-  const [globalZIndexCounter, setGlobalZIndexCounter] = useAtom(globalZIndexCounterStore);
+  const { assignZIndex } = useAssignWindowZIndex();
   const [animateObj, setAnimateObj] = useState({ translateY: '0%' });
 
   const imgRef = useRef<HTMLImageElement>();
@@ -64,25 +62,8 @@ export function DockItem({
       return apps;
     });
 
-    // 为新窗口分配最高的z-index
-    const isNewWindow = !windowZIndices[appID];
-    if (isNewWindow) {
-      // 获取下一个最高的z-index
-      const newZIndex = globalZIndexCounter + 1;
-      setGlobalZIndexCounter(newZIndex);
-      setWindowZIndices((prev) => ({
-        ...prev,
-        [appID]: newZIndex,
-      }));
-    } else {
-      // 如果是已存在的窗口，也给它分配最高的z-index
-      const newZIndex = globalZIndexCounter + 1;
-      setGlobalZIndexCounter(newZIndex);
-      setWindowZIndices((prev) => ({
-        ...prev,
-        [appID]: newZIndex,
-      }));
-    }
+    // 分配最高的 z-index（无论是新窗口还是已存在的窗口）
+    assignZIndex(appID);
 
     // 激活应用
     setActiveApp(appID);

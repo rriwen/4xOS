@@ -3,25 +3,22 @@ import { createRoot } from 'react-dom/client';
 import './css/global.scss';
 import { Desktop } from './views/desktop/Desktop';
 
-// WOWOWOWOW
-
 // 错误处理：确保即使应用初始化失败也能显示内容
+const showRootElement = () => {
+  const rootElement = document.getElementById('root');
+  if (rootElement) {
+    rootElement.style.opacity = '1';
+  }
+};
+
 window.addEventListener('error', (event) => {
   console.error('全局错误:', event.error);
-  // 确保 root 元素可见
-  const root = document.getElementById('root');
-  if (root) {
-    root.style.opacity = '1';
-  }
+  showRootElement();
 });
 
 window.addEventListener('unhandledrejection', (event) => {
   console.error('未处理的 Promise 拒绝:', event.reason);
-  // 确保 root 元素可见
-  const root = document.getElementById('root');
-  if (root) {
-    root.style.opacity = '1';
-  }
+  showRootElement();
 });
 
 try {

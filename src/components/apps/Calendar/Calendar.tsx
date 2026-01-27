@@ -60,11 +60,7 @@ const Calendar = () => {
         </Suspense>
       </section>
     </section>
-    // </CalendarAppContext.Provider>
   );
 };
-function isLeapYear(arg0: number) {
-  throw new Error('Function not implemented.');
-}
 
 export default Calendar;

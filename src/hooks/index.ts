@@ -4,3 +4,5 @@ export { useTheme } from './use-theme';
 export { useTimeout } from './use-timeout';
 export { useContextMenu } from './use-context-menu';
 export { useFocusOutside } from './use-focus-outside';
+export { useWindowZIndex, useAssignWindowZIndex } from './use-window-z-index';
+export { useWindowState } from './use-window-state';

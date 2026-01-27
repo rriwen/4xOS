@@ -20,7 +20,6 @@ export const Dock = () => {
 
   const mouseX = useMotionValue<number | null>(null);
 
-  // Hi
   return (
     <section id="dock" className={css.container}>
       <div
