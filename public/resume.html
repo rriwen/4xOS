@@ -262,6 +262,31 @@
             border-color: #6a6a6a;
         }
 
+        /* 和我聊聊按钮 */
+        .chat-button {
+            position: fixed;
+            top: 60px;
+            right: 20px;
+            background-color: #1a1a1a;
+            border: 1px solid #4a4a4a;
+            color: #e5e5e5;
+            padding: 8px 16px;
+            cursor: pointer;
+            font-size: 12px;
+            font-family: inherit;
+            border-radius: 4px;
+            z-index: 1000;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .chat-button:hover {
+            background-color: #2a2a2a;
+            border-color: #6a6a6a;
+        }
+
         /* Light 模式样式 */
         body.light-mode {
             background-color: #f5f5f5;
@@ -374,6 +399,17 @@
             border-color: #a0a0a0;
         }
 
+        body.light-mode .chat-button {
+            background-color: #ffffff;
+            border: 1px solid #d0d0d0;
+            color: #1a1a1a;
+        }
+
+        body.light-mode .chat-button:hover {
+            background-color: #f0f0f0;
+            border-color: #a0a0a0;
+        }
+
         /* 移动端响应式设计 */
         @media screen and (max-width: 768px) {
             body {
@@ -388,6 +424,13 @@
 
             .theme-toggle {
                 top: 10px;
+                right: 10px;
+                padding: 6px 12px;
+                font-size: 11px;
+            }
+
+            .chat-button {
+                top: 50px;
                 right: 10px;
                 padding: 6px 12px;
                 font-size: 11px;
@@ -526,6 +569,12 @@
                 padding: 5px 10px;
                 font-size: 10px;
             }
+
+            .chat-button {
+                top: 45px;
+                padding: 5px 10px;
+                font-size: 10px;
+            }
         }
 
         @media print {
@@ -548,6 +597,7 @@
 </head>
 <body>
     <button class="theme-toggle" id="themeToggle" aria-label="切换主题">🌓 切换主题</button>
+    <button class="chat-button" id="chatButton" aria-label="和我聊聊">💬 和我聊聊</button>
     <div class="container">
         <div class="header">
             <h1>任文倩</h1>
@@ -560,10 +610,9 @@
         </div>
 
         <div class="intro">
-            · <span class="highlight">复合型AI产品能力</span>：兼具深度体验设计思维与AI产品策略视野，擅长将技术可行性转化为直观用户价值，主导AI产品从0到1孵化（如ChatBI）<br>
-            · <span class="highlight">数据与商业驱动</span>：构建"数据+AI+洞察"混合分析体系，决策直接驱动关键指标提升（如用户满意度+30%、自助率提升至75%、技术支持成本-20%）<br>
-            · <span class="highlight">全链路AI提效实践</span>：善用AI工具（如Cursor）及自研插件加速原型验证与产品迭代，具备通过技术创新优化研发流程的工程化思维
-        </div>
+            · <span class="highlight">AI 产品和工程化思维</span>：融合产品规划与体验设计，擅长将Text2SQL、Agent等AI技术转化为可信落地产品，曾主导智能数据分析产品从技术验证到商业化的全流程孵化。<br>
+            · <span class="highlight">数据驱动的体验提升</span>：通过「数据+洞察+AI」体系分析研发场景瓶颈，推动关键指标优化，如产品自助率从15%提升至75%，降低20%技术支持成本，提升产品满意度30%。     <br>
+            · <span class="highlight">全链路AI提效实践</span>：深度使用并自研 AI 工具与插件，具备通过技术优化研发流程的工程思维，持续探索 AI 在代码生成、质量检查等场景的落地应用。 </div>
 
         <div class="section">
             <div class="section-title">工作经历</div>
@@ -573,14 +622,14 @@
                 <div class="company">蚂蚁集团 · OceanBase</div>
                 <div class="period">2021/07 - 2026/01</div>
                 <div class="description">
-                    负责数据开发产品矩阵的全局体验设计与 AI 创新产品的探索孵化，擅长运用AI工具与技术思维提升产品定义、验证与迭代的全链路效率
+                    负责数据库研发管控平台的产品体验与 AI 产品探索落地，服务数据库开发者和运维人员，核心工作是让数据库的开发、变更、运维流程更高效、更智能、更安全。
                 </div>
                 <ul>
-                    <li><span class="highlight">AI 产品策略和敏捷孵化</span>：主导 ChatBI 产品从0到1的构建。基于 Text2SQL 产品的客户和市场调研，洞察产品机会；协调产品/开发等团队，共同将技术方案转化为直观的产品设计方案，并运用Figma+Cursor快速构建可交互原型；参与构建业务测试集，推动核心场景准确率达到80%，验证商业化可行性；目前产品以在POC阶段。</li>
-                    <li><span class="highlight">AI 驱动的用研和体验洞察</span>：构建「定量数据+定性洞察+AI分析」的用户度量体系。利用AI + MCP +skills等工具，分析行为埋点与问卷数据，生成深度洞察报告，精准定位体验瓶颈；推动多项体验专项优化，促进核心产品用户满意度提升30%，助力用户规模实现翻倍增长。</li>
-                    <li><span class="highlight">核心流程重构与商业影响</span>：通过系统化分析用户行为数据，定义以"提升自助率"为目标的优化方案，推动3项关键优化上线后，核心任务自助率从低位提升至75%以上，并有效降低20%的客户技术支持成本。</li>
-                    <li><span class="highlight">交互设计和验证闭环</span>：建立"高保真原型+设计冲刺"的敏捷验证方式，聚焦核心指标快速迭代方案；将 AI 能力融入用户测试与数据分析环节，提升验证深度与效率，推动整体产品迭代效率提升30%。</li>
-                    <li><span class="highlight">技术提效与工具创新</span>：主导内部设计工具升级、开发设计环节的AI提效插件、搭建设计系统资产系统，通过自动化处理等重复性工作（如还原度验收），使设计团队基础效能提升约15%，为团队持续创新构建高效基础设施。</li>
+                    <li><span class="highlight">数据库变更管控体验设计</span>：负责数据开发管控平台、SQL编辑器等工具产品体验，深入数据库开发流程，针对数据变更、SQL检查等场景，重构并推动上线了开发管控平台、变更工单审批、SQL检查等管控方案，核心变更流程用户自助率从15%提升至75%+。</li>
+                    <li><span class="highlight">AI 数据产品探索落地</span>：主导智能数据分析产品（ChatBI）从0到1孵化，基于Text2SQL技术和客户调研、洞察产品机会，快速将技术方案转化为产品方案并推动落地，设计可视化解释机制以建立用户信任，将核心场景的SQL生成准确率从25%提升至80%，；同时探索AI在代码补全、审核提示等研发辅助场景的应用。</li>
+                    <li><span class="highlight">开发者体验度量体系</span>：建立“行为数据+用户反馈+AI分析”的体验度量体系，定位数据库开发工具链路的体验瓶颈；主导数据开发工具矩阵的整体体验优化，统一设计语言与交互规范，驱动产品满意度从4.8分提升至6.2分（7分制），并支撑用户规模实现翻倍增长。</li>
+                    <li><span class="highlight">工具和跨团队协同</span>：推动内部设计工具链的AI化升级，开发团队提效插件，将前端还原设计稿、还原度验收等重复性工作实现AI自动化，释放团队15%的基础产能；擅长协调产品、研发团队，快速探索将技术方案转化为用户可理解、可信任的产品方案并推动落地。</li>
+                    
                 </ul>
             </div>
 
@@ -622,48 +671,38 @@
             <div class="section-title">项目经历</div>
             
             <div class="project-item">
-                <div class="job-title">ChatBI 智能数据分析</div>
-                <div class="period">客户企业内部的业务开发人员数据分析诉求强烈，市场上同时存在通过AI降低数据分析门槛的商业潜力</div>
+                <div class="job-title">ChatBI 智能数据分析 —— AI场景探索和孵化</div>
+                <div class="period">为降低业务人员数据分析门槛，探索基于Text2SQL技术的AI产品落地孵化和商业化路径。</div>
                 <ul>
                     <li><span class="highlight">产品规划立项</span>：洞察市场空白，基于现有 Text2SQL 技术能力，成功推动ChatBI产品立项；全程参与从技术可行性验证、产品设计优化到商业化探索的完整路线图规划。</li>
                     <li><span class="highlight">技术方案共建</span>：项目初期协同技术团队优化提示词工程，效果未达业务标准；后通过深入行业调研，引入"指标层"作为语义理解中介，将AI分析准确率从 25% 提升至可用水平 80%。</li>
                     <li><span class="highlight">体验设计创新</span>：针对 AI 黑盒问题，主导设计 AI 执行过程可视化和分支管理的创新交互设计，帮助用户理解和信任AI的生成逻辑，并通过可用性测试验证方案设计；</li>
-                    <li><span class="highlight">阶段性成果</span>：准确率提升至80%，达到可用标准；创新交互方案内部满意度达6.2分（满分7分），所形成的AI产品设计模式被沉淀并复用于公司其他AI产品线。</li>
+                    <li><span class="highlight">阶段性成果</span>：准确率提升至80%，达到可用标准；形成了一套可复用的AI产品交互设计模式，验证了AI在降低数据使用门槛上的可行性。</li>
                 </ul>
             </div>
 
             <div class="project-item">
-                <div class="job-title">数据开发工具矩阵</div>
-                <div class="period">面对多个独立编辑器存在的交互不一致、操作繁琐、视觉陈旧问题，需在不中断业务前提下，系统性提升体验并构建可持续的设计体系。</div>
-                <ul>
-                    <li><span class="highlight">体验诊断与策略制定</span>：通过多轮开发者可用性测试与深度访谈，精准识别数据表格操作、暗黑模式适配、任务流编排等核心体验短板，制定以"提升开发效率与平台粘性"为目标的重构路线图。</li>
-                    <li><span class="highlight">设计标准化与方案实施</span>：主导编辑器体验的标准化重构，统一全局布局与交互模式，深度优化数据表、任务流、仪表盘等核心模块的交互设计，并完成专业级暗黑模式的体系化搭建。</li>
-                    <li><span class="highlight">数据验证与持续迭代</span>：结合用户反馈、可用性测试及产品埋点数据，形成设计验证闭环，确保持续提升工具的专业性与易用性。</li>
-                    <li><span class="highlight">阶段性成果</span>：产品满意度从4.8分大幅提升至6.2分（满分7分），驱动用户数实现翻倍增长；建立的标准化设计资产库，支撑新业务快速搭建，提升团队设计效率30%。</li>
-                </ul>
-            </div>
-
-            <div class="project-item">
-                <div class="job-title">数据库管控平台</div>
-                <div class="period">安装部署、数据迁移等多个运维工具核心链路操作复杂，导致用户自助完成率低至 15%，技术支持成本居高不下。</div>
+                <div class="job-title">数据库管控平台 —— 变更自助率提升</div>
+                <div class="period">数据迁移、数据安全管控、开发变更审批等多个核心链路操作复杂，导致用户自助完成率低至 15%，技术支持成本居高不下。</div>
                 <ul>
                     <li><span class="highlight">问题诊断与机会点挖掘</span>：综合运用问卷、访谈与埋点数据分析，绘制关键运维场景的用户体验地图，精准定位信息架构混乱与操作指引缺失等核心瓶颈。</li>
                     <li><span class="highlight">敏捷设计与流程重构</span>：采用设计冲刺方法，在一周内协同团队快速产出重构后的核心任务流程与高保真交互原型，并立即组织用户测试验证。</li>
-                    <li><span class="highlight">协同推动与效果闭环</span>：紧密协同产品与研发团队，将用户测试通过的方案拆解迭代、推动上线，并通过细化埋点持续监控数据表现，驱动持续优化。</li>
+                    <li><span class="highlight">协同推动与效果闭环</span>：紧密协同产品与研发团队，共同洞察SQL检查、数据脱敏等场景，快速验证方案并拆解迭代、推动上线，并通过细化埋点持续监控数据表现，驱动持续优化。</li>
                     <li><span class="highlight">阶段性成果</span>：核心任务链路的用户自助完成率提升至75%以上，有效降低了约20%的客户技术支持成本。</li>
                 </ul>
             </div>
 
             <div class="project-item">
-                <div class="job-title">数字征迁平台</div>
-                <div class="period">运打破移民行业传统线下模式，实现移民搬迁工作的流程信息化、数据采集智能化、操作终端化</div>
+                <div class="job-title">数据开发工具矩阵 —— 体验重构和标准化</div>
+                <div class="period">面对多个独立编辑器存在的交互不一致、操作繁琐、视觉陈旧问题，需在不中断业务前提下，系统性提升体验并构建可持续的设计体系。</div>
                 <ul>
-                    <li><span class="highlight">贴身访谈和调研</span>：通过焦点小组访谈、影子观察等方法挖掘用户使用多端平台的痛点，</li>
-                    <li><span class="highlight">产品流程优化</span>：根据政府特点和模式，梳理用户行为路径，提出优化系统流程的交互发难并洞察交互创新点，实现多端(PC+PAD+测绘设备)交互</li>
-                    <li><span class="highlight">团队协作与推动落地</span>：组织协调设计团队成员，共同完成项目计划，同时沉淀设计组件库，保证其他供应商输出的一致性和标准化</li>
-                    <li><span class="highlight">项目成果</span>：该平台已落地浙江省、雄安新区、云南澜沧江、昭通市等多个大型搬迁安置项目</li>
+                    <li><span class="highlight">体验诊断与策略制定</span>：通过多轮开发者可用性测试与深度访谈，精准识别数据表格操作、暗黑模式适配、任务流编排等核心体验短板，制定以"提升开发效率与平台粘性"为目标的重构路线图。</li>
+                    <li><span class="highlight">设计标准化与方案实施</span>：主导编辑器体验的标准化重构，统一全局布局与交互模式，深度优化数据表、任务流、仪表盘等核心模块的交互设计，并完成专业级暗黑模式的体系化搭建。</li>
+                    <li><span class="highlight">数据验证与持续迭代</span>：通过用户反馈、可用性测试、产品埋点数据，并结合AI+洞察分析，形成设计验证闭环，确保持续提升工具的专业性与易用性。</li>
+                    <li><span class="highlight">阶段性成果</span>：产品满意度从4.8分大幅提升至6.2分（满分7分），驱动用户数实现翻倍增长；建立的标准化设计资产库，支撑新业务快速搭建，提升团队设计效率30%。</li>
                 </ul>
             </div>
+
         </div>
 
         <div class="section">
@@ -672,31 +711,31 @@
                 <div class="skill-item">
                     <div class="skill-title">AI 产品与策略</div>
                     <ul>
-                        <li><span class="skill-subtitle">产品规划</span>：擅长AI场景挖掘、需求定义与MVP设计，具备从0到1的AI产品孵化及商业化路径规划经验。</li>
-                        <li><span class="skill-subtitle">技术协同</span>：熟悉机器学习与自然语言处理（NLP）应用场景，具备与算法团队协作定义模型优化目标（如准确率、响应时延）及构建业务测试集的能力。</li>
-                        <li><span class="skill-subtitle">Prompt工程与评估</span>：具备Prompt优化与AI能力评估的实践经验，能通过引入语义层、优化测试集等方式系统性提升AI任务可用性。</li>
+                        <li><span class="skill-subtitle">产品规划</span>：具备AI场景挖掘、MVP设计及商业化规划经验。</li>
+                        <li><span class="skill-subtitle">技术协同</span>：熟悉ML/NLP应用，能与研发团队协同优化产品目标（准确率、时延）及构建业务测试集。</li>
+                        <li><span class="skill-subtitle">Prompt与评估</span>：掌握Prompt优化方法，能通过语义层设计、测试集构建提升AI任务可用性。</li>
                     </ul>
                 </div>
                 <div class="skill-item">
                     <div class="skill-title">数据驱动与商业化分析</div>
                     <ul>
-                        <li><span class="skill-subtitle">洞察分析</span>：能通过A/B测试、用户行为埋点分析及满意度调研，构建混合研究体系，驱动产品优化与迭代决策。</li>
-                        <li><span class="skill-subtitle">商业洞察</span>：擅长将用户体验指标（如自助率、任务时长）与商业成果（如成本降低、用户增长）强关联，量化设计价值。</li>
+                        <li><span class="skill-subtitle">洞察分析</span>：能通过A/B测试、用户行为埋点分析及满意度调研，结合AI+洞察，构建体验度量体系，驱动产品优化与迭代决策。</li>
+                        <li><span class="skill-subtitle">价值量化</span>：擅长将用户体验指标（如自助率、任务时长）与商业成果（如成本降低、用户增长）强关联。</li>
                     </ul>
                 </div>
                 <div class="skill-item">
                     <div class="skill-title">工具与效能</div>
                     <ul>
-                        <li><span class="skill-subtitle">产品与设计工具</span>：精通Figma、Sketch、Axure，用于高保真原型、设计系统管理及团队协同。</li>
+                        <li><span class="skill-subtitle">产品与设计工具</span>：精通Figma等进行高保真原型demo、方案落地、系统设计及团队协同。</li>
                         <li><span class="skill-subtitle">AI与开发工具</span>：熟练使用Cursor、Vercel等辅助原型开发与验证；具备SQL基础数据分析能力。</li>
-                        <li><span class="skill-subtitle">提效实践</span>：拥有内部工具链建设经验，能通过开发AI提效插件、自动化流程提升团队产能。</li>
+                        <li><span class="skill-subtitle">提效实践</span>：拥有通过AI开发插件、自动化流程提升团队产能的经验。</li>
                     </ul>
                 </div>
                 <div class="skill-item">
                     <div class="skill-title">用户体验与设计创新</div>
                     <ul>
-                        <li><span class="skill-subtitle">系统设计</span>：精通用户旅程地图、交互原型、可用性测试及设计系统构建，能主导复杂B端产品的体验重构与标准化。</li>
-                        <li><span class="skill-subtitle">AI体验设计</span>：专注于解决AI产品的"黑盒"信任问题，擅长设计可解释的交互（如过程可视化、分支管理）以提升用户理解与采纳度。</li>
+                        <li><span class="skill-subtitle">系统体验设计</span>：精通用户旅程地图、交互原型、可用性测试及设计系统构建，能主导复杂B端产品的体验重构与标准化。</li>
+                        <li><span class="skill-subtitle">AI体验设计</span>：擅长通过过程可视化等交互手段解决AI“黑盒”信任问题。</li>
                     </ul>
                 </div>
             </div>
@@ -799,6 +838,12 @@
                 } catch (e) {
                     // 跨域限制，忽略
                 }
+            });
+            
+            // 和我聊聊按钮
+            const chatButton = document.getElementById('chatButton');
+            chatButton.addEventListener('click', function() {
+                window.open('https://rriwen4x.me', '_blank');
             });
         })();
     </script>
