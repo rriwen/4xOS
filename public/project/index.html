@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ChatBI 智能数据分析助手</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <h1 class="project-title">CHATBI</h1>
+                <button class="theme-toggle" id="themeToggle" aria-label="切换主题">
+                    <span class="theme-icon">◐</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="main">
+        <div class="container">
+            <!-- 一句话介绍 -->
+            <section class="hero">
+                <p class="hero-text">
+                    我主导了一款让业务人员用自然语言获取数据洞察的AI产品孵化，<strong>通过独特的产品架构设计与交互创新，将技术准确率从25%提升至80%，并解决了AI产品的核心信任问题。</strong>
+                </p>
+            </section>
+
+            <!-- 项目背景 -->
+            <section class="section">
+                <h2 class="section-number">01</h2>
+                <h3 class="section-title">项目背景：从两个"不理解"开始的挑战</h3>
+                
+                <div class="content-grid">
+                    <div class="content-text">
+                        <div class="problem-item">
+                            <span class="problem-label">业务不理解技术</span>
+                            <p>业务人员有强烈的数据需求，但无法理解和使用SQL。</p>
+                        </div>
+                        <div class="problem-item">
+                            <span class="problem-label">技术不理解业务</span>
+                            <p>Text2SQL模型直接翻译自然语言，因语义歧义导致准确率仅25%，无法实用。</p>
+                        </div>
+                        <div class="problem-item highlight">
+                            <span class="problem-label">我的角色</span>
+                            <p>作为兼具产品策略与交互设计能力的负责人，需要<strong>架起这座桥梁</strong>，将实验室技术转化为可信任的商业产品。</p>
+                        </div>
+                    </div>
+                    <div class="image-placeholder ratio-3-2">
+                        <span class="placeholder-text">插图：两个"不理解"的可视化</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 核心贡献 -->
+            <section class="section">
+                <h2 class="section-number">02</h2>
+                <h3 class="section-title">核心贡献：产品架构与交互设计双轨创新</h3>
+
+                <!-- 贡献1：产品策略层 -->
+                <div class="contribution-block">
+                    <div class="contribution-header">
+                        <span class="contribution-number">2.1</span>
+                        <h4 class="contribution-title">产品策略层：设计"业务指标层"，重构产品逻辑</h4>
+                    </div>
+                    
+                    <div class="content-grid">
+                        <div class="content-text">
+                            <div class="solution-item">
+                                <span class="solution-label">问题识别</span>
+                                <p>单纯优化提示词无法解决根本的语义鸿沟。</p>
+                            </div>
+                            <div class="solution-item highlight">
+                                <span class="solution-label">我的解决方案</span>
+                                <p>首创性提出在产品中增加<strong>"业务指标层"</strong>作为翻译中枢。</p>
+                                <ul class="solution-details">
+                                    <li><strong>产品化架构</strong>：将流程从"自然语言 → SQL"重构为"自然语言 → <strong>业务指标（如销售额、留存率）</strong> → SQL"。</li>
+                                    <li><strong>价值</strong>：将模糊的业务口语，映射为团队预先定义、清洗明确的业务概念，从根本上降低歧义。</li>
+                                </ul>
+                            </div>
+                            <div class="result-item">
+                                <span class="result-label">成果</span>
+                                <p>这一<strong>产品架构决策</strong>成为准确率从<strong class="big-number">25%</strong>飞跃至<strong class="big-number">80%</strong>的核心杠杆。</p>
+                            </div>
+                        </div>
+                        <div class="image-placeholder ratio-3-2">
+                            <span class="placeholder-text">对比图：旧流程 vs 新流程</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 贡献2：交互设计层 -->
+                <div class="contribution-block">
+                    <div class="contribution-header">
+                        <span class="contribution-number">2.2</span>
+                        <h4 class="contribution-title">交互设计层：发明"可视化解释"，解决AI信任危机</h4>
+                    </div>
+                    
+                    <div class="content-grid">
+                        <div class="content-text">
+                            <div class="solution-item">
+                                <span class="solution-label">问题识别</span>
+                                <p>即使SQL正确，业务用户因看不懂过程而不敢使用（"黑盒"问题）。</p>
+                            </div>
+                            <div class="solution-item highlight">
+                                <span class="solution-label">我的设计方案</span>
+                                <p>创造了<strong>"生成式解释"交互范式</strong>。</p>
+                                <ul class="solution-details">
+                                    <li><strong>过程可视化</strong>：并非简单展示SQL代码，而是设计动态信息流，可视化呈现"你的问题 → 识别出的指标 → 用于查询的字段 → 生成的图表"。</li>
+                                    <li><strong>分支管理</strong>：当AI产生歧义时，提供多个理解路径让用户选择，赋予用户控制权。</li>
+                                </ul>
+                            </div>
+                            <div class="result-item">
+                                <span class="result-label">价值</span>
+                                <p>将AI的"思考过程"透明化，将技术可靠性转化为<strong>可感知的用户信任</strong>。此交互模式被公司内部多个AI产品复用。</p>
+                            </div>
+                        </div>
+                        <div class="image-placeholder ratio-3-2">
+                            <span class="placeholder-text">交互流程图：过程可视化</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 贡献3：实施与验证 -->
+                <div class="contribution-block">
+                    <div class="contribution-header">
+                        <span class="contribution-number">2.3</span>
+                        <h4 class="contribution-title">实施与验证：用设计冲刺推动技术产品化</h4>
+                    </div>
+                    
+                    <div class="content-grid">
+                        <div class="content-text">
+                            <div class="method-item">
+                                <span class="method-label">敏捷落地</span>
+                                <p>使用Figma+Cursor高速构建高保真、可交互原型，在一周内组织设计冲刺，协同算法、工程团队对齐方案。</p>
+                            </div>
+                            <div class="method-item">
+                                <span class="method-label">数据验证</span>
+                                <p>参与构建业务测试集，将"准确率"这一技术指标，转化为可测量、可迭代的<strong>产品核心指标</strong>。</p>
+                            </div>
+                            <div class="method-item highlight">
+                                <span class="method-label">用户反馈</span>
+                                <p>设计方案通过可用性测试，获得<strong class="big-number">6.2分</strong>（满分7分）的内部满意度。</p>
+                            </div>
+                        </div>
+                        <div class="image-placeholder ratio-3-2">
+                            <span class="placeholder-text">界面截图：关键交互点</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 项目成果 -->
+            <section class="section">
+                <h2 class="section-number">03</h2>
+                <h3 class="section-title">项目成果与影响力</h3>
+                
+                <div class="results-grid">
+                    <div class="result-card">
+                        <span class="result-card-number">01</span>
+                        <h5 class="result-card-title">产品成果</h5>
+                        <p>成功推动项目从技术验证进入POC阶段，验证了商业化可行性。</p>
+                    </div>
+                    <div class="result-card">
+                        <span class="result-card-number">02</span>
+                        <h5 class="result-card-title">设计资产</h5>
+                        <p>沉淀出的<strong>"语义层产品架构"</strong>与<strong>"AI可解释性交互"模式</strong>，成为公司AI产品设计规范的一部分。</p>
+                    </div>
+                    <div class="result-card">
+                        <span class="result-card-number">03</span>
+                        <h5 class="result-card-title">个人验证</h5>
+                        <p>完整践行了从<strong>"用户洞察→产品架构→交互创新→数据验证"</strong>的复合能力闭环。</p>
+                    </div>
+                </div>
+
+                <div class="image-placeholder ratio-3-2 full-width">
+                    <span class="placeholder-text">数据图表：准确率提升曲线和用户满意度</span>
+                </div>
+            </section>
+
+            <!-- 双重优势 -->
+            <section class="section">
+                <h2 class="section-number">04</h2>
+                <h3 class="section-title">双重优势</h3>
+                
+                <div class="advantages-grid">
+                    <div class="advantage-item">
+                        <h5 class="advantage-title">作为产品经理的深度</h5>
+                        <p>您展现了定义关键产品架构、制定可量化指标、驱动技术团队解决核心问题的战略能力。</p>
+                    </div>
+                    <div class="advantage-item">
+                        <h5 class="advantage-title">作为交互设计师的锐度</h5>
+                        <p>您展现了将抽象的技术信任问题，转化为具体、优雅、有效的交互解决方案的创新能力。</p>
+                    </div>
+                    <div class="advantage-item highlight full-width">
+                        <h5 class="advantage-title">复合价值</h5>
+                        <p>您不是简单地传递需求或美化界面，而是<strong>用设计思维解决产品难题</strong>，用产品思维放大设计价值。这正是当下AI原生产品领域最需要的人才画像。</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p class="footer-text">ChatBI 智能数据分析助手</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
