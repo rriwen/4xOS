@@ -4,6 +4,7 @@ import { useImmerAtom } from 'jotai-immer';
 import { useState, useRef, useEffect } from 'react';
 import { fetchAndParseResume } from '__/helpers/parse-resume';
 import type { ResumeData } from '__/helpers/parse-resume';
+import { fetchAndParseChatBI } from '__/helpers/parse-chatbi';
 import {
   activeAppStore,
   globalZIndexCounterStore,
@@ -86,16 +87,13 @@ const isResumeRelated = (content: string): boolean => {
   return hasKeyword || hasPersonalReference;
 };
 
-const buildSystemPrompt = (resumeData: ResumeData | null): string => {
-  if (!resumeData) {
-    return `你是 4x（任文倩，泗澄）。请基于你的个人经历回答关于自己的问题，回答要自然、友好，就像在和朋友聊天一样。
+const buildSystemPrompt = (resumeData: ResumeData | null, chatBIContent: string | null): string => {
+  let prompt = `你是 4x（任文倩，泗澄）。请基于以下信息回答关于自己的问题，回答要自然、友好，就像在和朋友聊天一样。
 
-请用第一人称回答，语气要自然、专业但友好。每次回复的开头都要加上"嘿！"。如果被问到不确定的信息，可以诚实地说"我不太确定"或"让我想想"。`;
-  }
+`;
 
-  return `你是 4x（任文倩，泗澄）。请基于以下信息回答关于自己的问题，回答要自然、友好，就像在和朋友聊天一样。
-
-## 个人简介
+  if (resumeData) {
+    prompt += `## 个人简介
 ${resumeData.intro}
 
 ## 工作经历
@@ -116,10 +114,22 @@ ${resumeData.skills}
 - 手机：${resumeData.contact.phone}
 - 邮箱：${resumeData.contact.email}
 
-## 关于这个系统
+`;
+  }
+
+  if (chatBIContent) {
+    prompt += `## ChatBI 项目详情
+${chatBIContent}
+
+`;
+  }
+
+  prompt += `## 关于这个系统
 你现在所在的"Talk to 4x"应用是一个基于 Web 技术构建的 macOS 桌面环境模拟器中的一个应用，使用 Preact + Vite + TypeScript 开发。这个 AI 对话功能通过集成 DeepSeek API 实现，能够基于 4x 的个人经历、项目经验和技能信息进行对话。系统支持深色/浅色主题切换，采用现代化的 UI 设计，参考了 Gemini 的对话界面风格。
 
 请用第一人称回答，语气要自然、专业但友好。每次回复的开头都要加上"嘿！"。如果被问到不确定的信息，可以诚实地说"我不太确定"或"让我想想"。`;
+
+  return prompt;
 };
 
 const quickQuestions = [
@@ -142,6 +152,7 @@ const TalkTo4x = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [resumeData, setResumeData] = useState<ResumeData | null>(null);
+  const [chatBIContent, setChatBIContent] = useState<string | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
   
@@ -203,9 +214,10 @@ const TalkTo4x = () => {
     }, 300); // 增加延迟时间，确保窗口已经完全渲染和初始化
   };
 
-  // 在组件挂载时加载简历数据
+  // 在组件挂载时加载简历数据和 ChatBI 内容
   useEffect(() => {
-    const loadResume = async () => {
+    const loadData = async () => {
+      // 加载简历数据
       try {
         const data = await fetchAndParseResume();
         setResumeData(data);
@@ -213,8 +225,17 @@ const TalkTo4x = () => {
         console.error('加载简历数据失败:', err);
         // 不设置错误状态，允许应用继续运行，只是没有简历数据
       }
+
+      // 加载 ChatBI 内容
+      try {
+        const chatBI = await fetchAndParseChatBI();
+        setChatBIContent(chatBI);
+      } catch (err) {
+        console.error('加载 ChatBI 内容失败:', err);
+        // 不设置错误状态，允许应用继续运行，只是没有 ChatBI 内容
+      }
     };
-    loadResume();
+    loadData();
   }, []);
 
   const scrollToBottom = () => {
@@ -243,7 +264,7 @@ const TalkTo4x = () => {
         throw new Error('未配置 DeepSeek API Key，请在 .env 文件中设置 VITE_DEEPSEEK_API_KEY，并重启开发服务器');
       }
 
-      const systemPrompt = buildSystemPrompt(resumeData);
+      const systemPrompt = buildSystemPrompt(resumeData, chatBIContent);
       const conversationHistory = [
         { role: 'system', content: systemPrompt },
         ...messages.map((msg) => ({ role: msg.role, content: msg.content })),
@@ -380,7 +401,7 @@ const TalkTo4x = () => {
         throw new Error('未配置 DeepSeek API Key，请在 .env 文件中设置 VITE_DEEPSEEK_API_KEY，并重启开发服务器');
       }
 
-      const systemPrompt = buildSystemPrompt(resumeData);
+      const systemPrompt = buildSystemPrompt(resumeData, chatBIContent);
       const conversationHistory = [
         { role: 'system', content: systemPrompt },
         ...messages.map((msg) => ({ role: msg.role, content: msg.content })),

@@ -5,46 +5,94 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ChatBI 智能数据分析助手</title>
     <link rel="stylesheet" href="styles.css">
+    <!-- 主题初始化脚本 - 必须在页面渲染前执行 -->
+    <script>
+      (function() {
+        // 优先检查 URL 参数（Safari 组件传递的）
+        var urlParams = new URLSearchParams(window.location.search);
+        var urlTheme = urlParams.get('theme');
+        
+        var theme;
+        if (urlTheme === 'dark' || urlTheme === 'light') {
+          theme = urlTheme;
+        } else {
+          // 默认使用系统偏好（不读取 localStorage）
+          theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        }
+        
+        // 立即将主题类添加到 html 和 body
+        document.documentElement.setAttribute('data-theme', theme);
+        if (document.body) {
+          document.body.classList.add(theme);
+        } else {
+          document.addEventListener('DOMContentLoaded', function() {
+            document.body.classList.add(theme);
+          });
+        }
+      })();
+    </script>
 </head>
 <body>
-    <header class="header">
-        <div class="container">
-            <div class="header-content">
-                <h1 class="project-title">CHATBI</h1>
-                <button class="theme-toggle" id="themeToggle" aria-label="切换主题">
-                    <span class="theme-icon">◐</span>
-                </button>
-            </div>
-        </div>
-    </header>
+    <button class="theme-toggle" id="themeToggle" aria-label="切换主题">◐ 切换主题</button>
+    <button class="chat-button" id="chatButton" aria-label="和我聊聊">💬 和我聊聊</button>
+
+    <!-- 全屏 Banner -->
+    <div class="banner">
+        <img src="banner.jpg" alt="ChatBI 项目截图" class="banner-image">
+    </div>
 
     <main class="main">
         <div class="container">
             <!-- 一句话介绍 -->
             <section class="hero">
+                <h1 class="hero-title">ChatBI</h1>
                 <p class="hero-text">
-                    我主导了一款让业务人员用自然语言获取数据洞察的AI产品孵化，<strong>通过独特的产品架构设计与交互创新，将技术准确率从25%提升至80%，并解决了AI产品的核心信任问题。</strong>
+                    面向企业内部的 AI 智能数据分析平台，融合面向业务人员的对话式分析助手与面向数据团队的指标配置与管理后台，打通从数据定义到业务洞察的全链路体验。
                 </p>
+            </section>
+
+            <!-- 产品价值定位 -->
+            <section class="section product-value">
+                <h2 class="section-number">01</h2>
+                <h3 class="section-title">产品价值定位</h3>
+                
+                <div class="value-block">
+                    <div class="value-grid">
+                        <div class="value-card">
+                            <h5 class="value-card-title">智能分析助手 —— 面向业务人员</h5>
+                            <p class="value-card-text">通过自然语言交互，让运营、产品、市场等业务角色无需编写 SQL 即可自主完成数据查询与分析，一键获取可视化图表和数据解读，实现"对话即洞察"。</p>
+                        </div>
+                        <div class="value-card">
+                            <h5 class="value-card-title">指标配置后台—— 面向数据团队/分析师</h5>
+                            <p class="value-card-text">提供统一的指标平台治理业务口径，通过可视化的指标定义、维度管理、数据源连接与权限管控能力，确保业务语义的准确性与一致性，从源头保障数据可信。</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 产品独特性 -->
+                <div class="value-block highlight">
+                    <p class="value-unique-text">ChatBI的核心创新在于通过产品化架构，将松散的"自然语言-SQL"映射关系，重构为以业务指标层为中心的稳健链路（自然语言 → 标准化业务指标 → SQL）。这不仅大幅提升了查询的准确率与稳定性，更通过配置后台将业务知识沉淀为可复用的数据资产，使 AI 能力建立在可信、一致的数据基础之上。</p>
+                </div>
             </section>
 
             <!-- 项目背景 -->
             <section class="section">
-                <h2 class="section-number">01</h2>
+                <h2 class="section-number">02</h2>
                 <h3 class="section-title">项目背景：从两个"不理解"开始的挑战</h3>
                 
                 <div class="content-grid">
                     <div class="content-text">
                         <div class="problem-item">
                             <span class="problem-label">业务不理解技术</span>
-                            <p>业务人员有强烈的数据需求，但无法理解和使用SQL。</p>
+                            <p>内外部的业务人员有强烈的数据需求，比如用户行为埋点数据分析，但无法理解和使用 SQL 取数、分析路径长。</p>
                         </div>
                         <div class="problem-item">
                             <span class="problem-label">技术不理解业务</span>
-                            <p>Text2SQL模型直接翻译自然语言，因语义歧义导致准确率仅25%，无法实用。</p>
+                            <p>现有的内部 Text2SQL 技术直接通过翻译自然语言拼接 SQL 的方式有局限性，准确率仅25%，无法实际用于业务。</p>
                         </div>
                         <div class="problem-item highlight">
                             <span class="problem-label">我的角色</span>
-                            <p>作为兼具产品策略与交互设计能力的负责人，需要<strong>架起这座桥梁</strong>，将实验室技术转化为可信任的商业产品。</p>
+                            <p>作为同时负责产品规划与体验设计的项目核心，我主动打破角色与能力的边界，通过技术理解与产品化思维，探索多个创新方案，系统性推动项目从概念验证走向落地实践。</p>
                         </div>
                     </div>
                     <div class="image-placeholder ratio-3-2">
@@ -55,13 +103,12 @@
 
             <!-- 核心贡献 -->
             <section class="section">
-                <h2 class="section-number">02</h2>
+                <h2 class="section-number">03</h2>
                 <h3 class="section-title">核心贡献：产品架构与交互设计双轨创新</h3>
 
                 <!-- 贡献1：产品策略层 -->
                 <div class="contribution-block">
                     <div class="contribution-header">
-                        <span class="contribution-number">2.1</span>
                         <h4 class="contribution-title">产品策略层：设计"业务指标层"，重构产品逻辑</h4>
                     </div>
                     
@@ -93,7 +140,6 @@
                 <!-- 贡献2：交互设计层 -->
                 <div class="contribution-block">
                     <div class="contribution-header">
-                        <span class="contribution-number">2.2</span>
                         <h4 class="contribution-title">交互设计层：发明"可视化解释"，解决AI信任危机</h4>
                     </div>
                     
@@ -125,23 +171,22 @@
                 <!-- 贡献3：实施与验证 -->
                 <div class="contribution-block">
                     <div class="contribution-header">
-                        <span class="contribution-number">2.3</span>
-                        <h4 class="contribution-title">实施与验证：用设计冲刺推动技术产品化</h4>
+                        <h4 class="contribution-title">实施与验证：敏捷迭代 快速推动技术产品化</h4>
                     </div>
                     
                     <div class="content-grid">
                         <div class="content-text">
                             <div class="method-item">
                                 <span class="method-label">敏捷落地</span>
-                                <p>使用Figma+Cursor高速构建高保真、可交互原型，在一周内组织设计冲刺，协同算法、工程团队对齐方案。</p>
+                                <p>使用Figma+Cursor高速构建高保真、可交互原型，多轮迭代汇报、协同研发团队推动方案落地。</p>
                             </div>
                             <div class="method-item">
                                 <span class="method-label">数据验证</span>
                                 <p>参与构建业务测试集，将"准确率"这一技术指标，转化为可测量、可迭代的<strong>产品核心指标</strong>。</p>
                             </div>
                             <div class="method-item highlight">
-                                <span class="method-label">用户反馈</span>
-                                <p>设计方案通过可用性测试，获得<strong class="big-number">6.2分</strong>（满分7分）的内部满意度。</p>
+                                <span class="method-label">内部反馈</span>
+                                <p>设计方案通过可用性测试，获得<strong class="big-number">6.2分</strong>（满分7分）的内部满意度</p>
                             </div>
                         </div>
                         <div class="image-placeholder ratio-3-2">
@@ -153,58 +198,47 @@
 
             <!-- 项目成果 -->
             <section class="section">
-                <h2 class="section-number">03</h2>
+                <h2 class="section-number">04</h2>
                 <h3 class="section-title">项目成果与影响力</h3>
                 
                 <div class="results-grid">
-                    <div class="result-card">
+                    <div class="result-card" data-card-index="0">
                         <span class="result-card-number">01</span>
                         <h5 class="result-card-title">产品成果</h5>
                         <p>成功推动项目从技术验证进入POC阶段，验证了商业化可行性。</p>
                     </div>
-                    <div class="result-card">
+                    <div class="result-card" data-card-index="1">
                         <span class="result-card-number">02</span>
                         <h5 class="result-card-title">设计资产</h5>
-                        <p>沉淀出的<strong>"语义层产品架构"</strong>与<strong>"AI可解释性交互"模式</strong>，成为公司AI产品设计规范的一部分。</p>
+                        <p>沉淀出的 AI 可解释性交互模式和组件库，成为公司AI产品设计规范的一部分。</p>
                     </div>
-                    <div class="result-card">
+                    <div class="result-card" data-card-index="2">
                         <span class="result-card-number">03</span>
                         <h5 class="result-card-title">个人验证</h5>
-                        <p>完整践行了从<strong>"用户洞察→产品架构→交互创新→数据验证"</strong>的复合能力闭环。</p>
+                        <p>完整践行了从<strong>"行业洞察→产品架构→交互创新→推动落地验证"</strong>的复合能力闭环。</p>
                     </div>
                 </div>
 
-                <div class="image-placeholder ratio-3-2 full-width">
-                    <span class="placeholder-text">数据图表：准确率提升曲线和用户满意度</span>
+                <div class="result-image-container">
+                    <div class="image-placeholder ratio-3-1 full-width active" data-image-index="0">
+                        <span class="placeholder-text">数据图表：准确率提升曲线和用户满意度</span>
+                    </div>
+                    <div class="image-placeholder ratio-3-1 full-width" data-image-index="1">
+                        <span class="placeholder-text">设计资产：语义层产品架构与AI可解释性交互模式</span>
+                    </div>
+                    <div class="image-placeholder ratio-3-1 full-width" data-image-index="2">
+                        <span class="placeholder-text">个人验证：用户洞察→产品架构→交互创新→数据验证闭环</span>
+                    </div>
                 </div>
             </section>
 
-            <!-- 双重优势 -->
-            <section class="section">
-                <h2 class="section-number">04</h2>
-                <h3 class="section-title">双重优势</h3>
-                
-                <div class="advantages-grid">
-                    <div class="advantage-item">
-                        <h5 class="advantage-title">作为产品经理的深度</h5>
-                        <p>您展现了定义关键产品架构、制定可量化指标、驱动技术团队解决核心问题的战略能力。</p>
-                    </div>
-                    <div class="advantage-item">
-                        <h5 class="advantage-title">作为交互设计师的锐度</h5>
-                        <p>您展现了将抽象的技术信任问题，转化为具体、优雅、有效的交互解决方案的创新能力。</p>
-                    </div>
-                    <div class="advantage-item highlight full-width">
-                        <h5 class="advantage-title">复合价值</h5>
-                        <p>您不是简单地传递需求或美化界面，而是<strong>用设计思维解决产品难题</strong>，用产品思维放大设计价值。这正是当下AI原生产品领域最需要的人才画像。</p>
-                    </div>
-                </div>
-            </section>
         </div>
     </main>
 
     <footer class="footer">
         <div class="container">
-            <p class="footer-text">ChatBI 智能数据分析助手</p>
+            <p class="footer-text">欢迎随时联系我！</p>
+            <p class="footer-contact">手机/微信：18362976211 | 邮箱：rriwen@gmail.com</p>
         </div>
     </footer>
 

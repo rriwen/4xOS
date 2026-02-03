@@ -23,18 +23,19 @@
   background-size: cover;
   background-position: center;
 
-  // 占位背景色，避免白屏
-  background-color: #f5f5f5;
-  :global(body.dark) & {
-    background-color: #1a1a1a;
+  // 占位背景色，默认暗色模式避免闪烁
+  background-color: #1a1a1a;
+  :global(body.light) & {
+    background-color: #f5f5f5;
   }
 
   // 壁纸（通过 JavaScript 动态设置，这里作为后备）
-  background-image: url(/assets/wallpapers/light-background.jpg);
+  // 默认暗色模式壁纸，避免闪烁
+  background-image: url(/assets/wallpapers/dark-background.jpg);
 
-  :global(body.dark) & {
-    // 暗色模式使用暗色版本的壁纸
-    background-image: url(/assets/wallpapers/dark-background.jpg);
+  :global(body.light) & {
+    // 亮色模式使用亮色版本的壁纸
+    background-image: url(/assets/wallpapers/light-background.jpg);
   }
 
   // 过渡效果

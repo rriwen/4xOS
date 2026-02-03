@@ -13,7 +13,8 @@ const Safari = () => {
   // 初始化默认标签页
   const [tabs, setTabs] = useState<Tab[]>([
     { id: Date.now().toString(), url: '/resume.html', title: '我的简历' },
-    { id: (Date.now() + 1).toString(), url: 'coming-soon', title: '我的网站' },
+    { id: (Date.now() + 1).toString(), url: '/project/index.html', title: 'ChatBI 项目' },
+    { id: (Date.now() + 2).toString(), url: 'coming-soon', title: '我的网站' },
   ]);
   const [activeTabId, setActiveTabId] = useState<string>(tabs[0].id); // 默认激活"我的简历"
   const [theme] = useTheme();
@@ -38,6 +39,44 @@ const Safari = () => {
       notifyIframeTheme(iframe);
     });
   }, [theme, notifyIframeTheme]);
+
+  // 打开或切换到指定URL的标签页
+  const openOrSwitchToTab = useCallback((url: string, title?: string) => {
+    setTabs((currentTabs) => {
+      // 检查是否已存在该URL的标签页
+      const existingTab = currentTabs.find((tab) => tab.url === url);
+      if (existingTab) {
+        // 如果存在，切换到该标签页
+        setActiveTabId(existingTab.id);
+        return currentTabs;
+      }
+      // 如果不存在，创建新标签页
+      const newTab: Tab = {
+        id: Date.now().toString(),
+        url,
+        title: title || '',
+      };
+      setActiveTabId(newTab.id);
+      return [...currentTabs, newTab];
+    });
+  }, []);
+
+  // 监听来自iframe的消息（用于打开新标签页）
+  useEffect(() => {
+    const handleMessage = (event: MessageEvent) => {
+      if (event.data && event.data.type === 'open-tab') {
+        const { url, title } = event.data;
+        if (url) {
+          openOrSwitchToTab(url, title);
+        }
+      }
+    };
+
+    window.addEventListener('message', handleMessage);
+    return () => {
+      window.removeEventListener('message', handleMessage);
+    };
+  }, [openOrSwitchToTab]);
 
   // 切换标签页
   const switchTab = useCallback((tabId: string, e?: any) => {

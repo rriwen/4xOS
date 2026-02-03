@@ -1,75 +1,77 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="utf-8" />
-    <link rel="icon" href="/assets/app-icons/finder/32.png" />
-    <!-- <meta name="viewport" content="width=device-width, initial-scale=1" /> -->
-    <meta name="description" content="MacOS Desktop experience for Web" />
-    <title>4xOS</title>
-
-    <meta property="og:title" content="4xOS" />
-    <meta property="og:description" content="A painting of macOS Big Sur in HTML, CSS and JS" />
-    <meta property="og:image" content="https://macos.now.sh/assets/cover-image.png" />
-    <meta property="og:url" content="https://macos.now.sh" />
-    <meta name="twitter:card" content="summary_large_image" />
-
-    <!-- DNS 预解析和预连接优化 -->
-    <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
-    <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-
-    <!-- 预加载关键资源 -->
-    <link rel="preload" href="/assets/app-icons/finder/32.png" as="image" fetchpriority="high" />
-
-    <!-- 防止主题闪烁的内联样式 -->
-    <style>
-      /* 默认隐藏内容，直到主题应用完成 */
-      #root {
-        opacity: 0;
-        transition: opacity 0.2s ease-in-out;
-      }
-      
-      /* 当主题类应用后显示内容 */
-      html.light body #root,
-      html.dark body #root,
-      body.light #root,
-      body.dark #root {
-        opacity: 1;
-      }
-      
-      /* 后备方案：如果 3 秒后主题仍未应用，强制显示内容 */
-      @keyframes forceShow {
-        to {
-          opacity: 1;
-        }
-      }
-      
-      #root {
-        animation: forceShow 0.1s ease-in-out 3s forwards;
-      }
-    </style>
-
-    <!-- 主题初始化脚本 - 必须在页面渲染前执行 -->
+    <!-- 主题初始化脚本 - 必须在任何其他内容之前执行，防止闪烁 -->
     <script>
       (function() {
         // 读取 localStorage 中的主题设置
         var storedTheme = localStorage.getItem('theme:type');
         
-        // 如果没有存储值，使用系统偏好
-        var theme = storedTheme || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        // 如果没有存储值，默认使用暗色模式（避免闪烁）
+        var theme = storedTheme || 'dark';
         
         // 立即将主题类添加到 html（html 元素总是存在）
         document.documentElement.classList.add(theme);
+        
+        // 立即设置 CSS 变量，确保暗色模式变量立即生效
+        var root = document.documentElement;
+        if (theme === 'dark') {
+          // 背景和文本颜色
+          root.style.setProperty('--token-color-background', 'hsl(240, 3%, 11%)');
+          root.style.setProperty('--token-color-background-hsl', '240, 3%, 11%');
+          root.style.setProperty('--token-color-text-primary', 'hsl(240, 24%, 100%)');
+          root.style.setProperty('--token-color-text-primary-hsl', '240, 24%, 100%');
+          root.style.setProperty('--token-color-text-secondary', 'hsl(240, 3%, 74%)');
+          root.style.setProperty('--token-color-text-secondary-hsl', '240, 3%, 74%');
+          root.style.setProperty('--token-color-surface', 'hsl(240, 3%, 15%)');
+          root.style.setProperty('--token-color-surface-hsl', '240, 3%, 15%');
+          root.style.setProperty('--token-color-border', 'hsl(240, 3%, 26%)');
+          root.style.setProperty('--token-color-border-hsl', '240, 3%, 26%');
+          
+          // TopBar 和 Window 组件使用的关键变量
+          root.style.setProperty('--app-color-light', 'hsl(240, 3%, 11%)');
+          root.style.setProperty('--app-color-light-hsl', '240, 3%, 11%');
+          root.style.setProperty('--app-color-light-contrast', 'hsl(240, 24%, 100%)');
+          root.style.setProperty('--app-color-light-contrast-hsl', '240, 24%, 100%');
+          root.style.setProperty('--app-color-dark', 'hsl(240, 24%, 100%)');
+          root.style.setProperty('--app-color-dark-hsl', '240, 24%, 100%');
+          root.style.setProperty('--app-color-dark-contrast', 'hsl(240, 3%, 11%)');
+          root.style.setProperty('--app-color-dark-contrast-hsl', '240, 3%, 11%');
+          
+          // 灰色变量（用于菜单按钮等）
+          root.style.setProperty('--app-color-grey-100-hsl', '0, 0%, 26%');
+          root.style.setProperty('--app-color-grey-200-hsl', '0, 0%, 19%');
+        } else {
+          // 亮色模式变量
+          root.style.setProperty('--token-color-background', 'hsl(240, 24%, 100%)');
+          root.style.setProperty('--token-color-background-hsl', '240, 24%, 100%');
+          root.style.setProperty('--token-color-text-primary', 'hsl(240, 3%, 11%)');
+          root.style.setProperty('--token-color-text-primary-hsl', '240, 3%, 11%');
+          root.style.setProperty('--token-color-text-secondary', 'hsl(240, 3%, 46%)');
+          root.style.setProperty('--token-color-text-secondary-hsl', '240, 3%, 46%');
+          root.style.setProperty('--token-color-surface', 'hsl(240, 24%, 100%)');
+          root.style.setProperty('--token-color-surface-hsl', '240, 24%, 100%');
+          root.style.setProperty('--token-color-border', 'hsl(240, 3%, 88%)');
+          root.style.setProperty('--token-color-border-hsl', '240, 3%, 88%');
+          
+          root.style.setProperty('--app-color-light', 'hsl(240, 24%, 100%)');
+          root.style.setProperty('--app-color-light-hsl', '240, 24%, 100%');
+          root.style.setProperty('--app-color-light-contrast', 'hsl(240, 3%, 11%)');
+          root.style.setProperty('--app-color-light-contrast-hsl', '240, 3%, 11%');
+          root.style.setProperty('--app-color-dark', 'hsl(240, 3%, 11%)');
+          root.style.setProperty('--app-color-dark-hsl', '240, 3%, 11%');
+          root.style.setProperty('--app-color-dark-contrast', 'hsl(240, 24%, 100%)');
+          root.style.setProperty('--app-color-dark-contrast-hsl', '240, 24%, 100%');
+        }
         
         // 在 body 存在时立即添加类，否则在 DOMContentLoaded 时添加
         function applyThemeToBody() {
           if (document.body) {
             document.body.classList.add(theme);
             // 确保 root 元素可见
-            var root = document.getElementById('root');
-            if (root) {
-              root.style.opacity = '1';
+            var rootEl = document.getElementById('root');
+            if (rootEl) {
+              rootEl.style.opacity = '1';
             }
           }
         }
@@ -88,9 +90,9 @@
         
         // 后备方案：确保内容最终会显示
         setTimeout(function() {
-          var root = document.getElementById('root');
-          if (root && root.style.opacity === '0') {
-            root.style.opacity = '1';
+          var rootEl = document.getElementById('root');
+          if (rootEl && rootEl.style.opacity === '0') {
+            rootEl.style.opacity = '1';
           }
         }, 100);
         
@@ -139,6 +141,99 @@
         preloadNonCriticalResources();
       })();
     </script>
+
+    <meta charset="utf-8" />
+    <link rel="icon" href="/assets/app-icons/finder/32.png" />
+    <!-- <meta name="viewport" content="width=device-width, initial-scale=1" /> -->
+    <meta name="description" content="MacOS Desktop experience for Web" />
+    <title>4xOS</title>
+
+    <meta property="og:title" content="4xOS" />
+    <meta property="og:description" content="A painting of macOS Big Sur in HTML, CSS and JS" />
+    <meta property="og:image" content="https://macos.now.sh/assets/cover-image.png" />
+    <meta property="og:url" content="https://macos.now.sh" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <!-- DNS 预解析和预连接优化 -->
+    <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
+    <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+    <!-- 预加载关键资源 -->
+    <link rel="preload" href="/assets/app-icons/finder/32.png" as="image" fetchpriority="high" />
+
+    <!-- 防止主题闪烁的内联样式 - 必须在 CSS 文件加载前应用 -->
+    <style>
+      /* 默认暗色模式背景，避免闪烁 - 使用 !important 确保优先级 */
+      html, body {
+        background-color: #1a1a1a !important;
+        color: #ffffff !important;
+      }
+      
+      /* 亮色模式背景（当主题类应用后生效） */
+      html.light, body.light {
+        background-color: #f5f5f5 !important;
+        color: #000000 !important;
+      }
+      
+      /* 默认隐藏内容，直到主题应用完成 */
+      #root {
+        opacity: 0;
+        transition: opacity 0.2s ease-in-out;
+        background-color: #1a1a1a;
+      }
+      
+      /* 亮色模式下的 root 背景 */
+      html.light #root,
+      body.light #root {
+        background-color: #f5f5f5;
+      }
+      
+      /* TopBar 默认暗色样式，防止闪烁 */
+      #top-bar,
+      header[id="top-bar"] {
+        background-color: hsla(240, 3%, 11%, 0.3) !important;
+        color: hsl(240, 24%, 100%) !important;
+      }
+      
+      html.light #top-bar,
+      html.light header[id="top-bar"],
+      body.light #top-bar,
+      body.light header[id="top-bar"] {
+        background-color: hsla(240, 24%, 100%, 0.3) !important;
+        color: hsl(240, 3%, 11%) !important;
+      }
+      
+      /* 窗口容器默认暗色样式 */
+      [class*="container"][class*="Window"] {
+        background-color: hsl(240, 3%, 11%) !important;
+      }
+      
+      html.light [class*="container"][class*="Window"],
+      body.light [class*="container"][class*="Window"] {
+        background-color: hsl(240, 24%, 100%) !important;
+      }
+      
+      /* 当主题类应用后显示内容 */
+      html.light body #root,
+      html.dark body #root,
+      body.light #root,
+      body.dark #root {
+        opacity: 1;
+      }
+      
+      /* 后备方案：如果 3 秒后主题仍未应用，强制显示内容 */
+      @keyframes forceShow {
+        to {
+          opacity: 1;
+        }
+      }
+      
+      #root {
+        animation: forceShow 0.1s ease-in-out 3s forwards;
+      }
+    </style>
   </head>
   <body>
     <div id="root"></div>
