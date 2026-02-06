@@ -32,11 +32,14 @@ export function useWindowZIndex(appID: AppID, windowRef: React.RefObject<WindowR
   useEffect(() => {
     setWindowZIndices((prev) => {
       if (!prev[appID]) {
-        // 新窗口：分配新的 z-index
+        // 新窗口：分配最高的 z-index，确保新窗口总是在最上层
         let newZIndex = 100;
         setGlobalZIndexCounter((current) => {
+          // 确保新窗口获得最高的 z-index
           newZIndex = current + 1;
           setAppZIndex(newZIndex);
+          // 立即同步更新 DOM 的 z-index
+          updateDOMZIndex(newZIndex);
           return newZIndex;
         });
         return { ...prev, [appID]: newZIndex };
@@ -45,6 +48,8 @@ export function useWindowZIndex(appID: AppID, windowRef: React.RefObject<WindowR
         const savedZIndex = prev[appID];
         if (savedZIndex !== undefined) {
           setAppZIndex(savedZIndex);
+          // 立即同步更新 DOM 的 z-index
+          updateDOMZIndex(savedZIndex);
           // 如果预设的 z-index 比当前全局计数器高，更新全局计数器
           if (savedZIndex > globalZIndexCounter) {
             setGlobalZIndexCounter(savedZIndex);
@@ -77,6 +82,15 @@ export function useWindowZIndex(appID: AppID, windowRef: React.RefObject<WindowR
       });
     }
   }, [activeApp, appID, forceZIndexUpdate, setGlobalZIndexCounter, setWindowZIndices]);
+
+  // 监听 windowZIndices 的外部更新（例如通过 assignZIndex），确保窗口组件能够同步更新
+  useEffect(() => {
+    const currentZIndex = windowZIndices[appID];
+    if (currentZIndex !== undefined && currentZIndex !== appZIndex) {
+      setAppZIndex(currentZIndex);
+      updateDOMZIndex(currentZIndex);
+    }
+  }, [windowZIndices, appID, appZIndex]);
 
   // 更新窗口的 z-index 样式 - 使用 useLayoutEffect 确保同步更新
   useLayoutEffect(() => {

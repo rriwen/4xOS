@@ -56,14 +56,14 @@ export function DockItem({
       return minimized;
     });
 
+    // 先分配最高的 z-index（在打开窗口之前），确保新窗口总是在最上层
+    assignZIndex(appID);
+
     // 打开应用
     setOpenApps((apps) => {
       apps[appID] = true;
       return apps;
     });
-
-    // 分配最高的 z-index（无论是新窗口还是已存在的窗口）
-    assignZIndex(appID);
 
     // 激活应用
     setActiveApp(appID);
