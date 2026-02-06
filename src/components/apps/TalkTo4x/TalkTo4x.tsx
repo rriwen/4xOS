@@ -117,9 +117,9 @@ ${resumeData.skills}
 `;
   }
 
-  if (chatBIContent) {
+  if (chatBIContent && chatBIContent.trim().length > 0) {
     prompt += `## ChatBI 项目详情
-${chatBIContent}
+${chatBIContent.trim()}
 
 `;
   }
