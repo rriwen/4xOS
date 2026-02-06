@@ -9,6 +9,6 @@ export const AppIcon = ({
   ...props
 }: AppIconProps & React.SVGProps<SVGSVGElement>) => (
   <svg {...props} xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24">
-    <path d={path} />
+    <path d={path} fill="currentColor" />
   </svg>
 );

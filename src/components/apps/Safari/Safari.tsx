@@ -1,5 +1,7 @@
 import clsx from 'clsx';
 import { useState, useCallback, useEffect, useRef } from 'react';
+import { mdiBookmarkOutline } from '@mdi/js';
+import { AppIcon } from '__/components/utils/AppIcon';
 import { useTheme } from '__/hooks';
 import css from './Safari.module.scss';
 
@@ -7,21 +9,41 @@ type Tab = {
   id: string;
   url: string;
   title: string;
+  history: string[];
+  historyIndex: number;
 };
+
+// URL 映射函数：将内部 URL 映射为显示 URL
+const getDisplayUrl = (url: string): string => {
+  if (url === '/resume.html') {
+    return 'https://rriwen.me/aboutme';
+  }
+  if (url === '/project/index.html') {
+    return 'https://rriwen.me/project-chatbi';
+  }
+  return url;
+};
+
+// 书签列表
+const bookmarks = [
+  { url: '/resume.html', title: '关于我', displayUrl: 'https://rriwen.me/aboutme' },
+  { url: '/project/index.html', title: 'ChatBI 项目', displayUrl: 'https://rriwen.me/project-chatbi' },
+];
 
 const Safari = () => {
   // 初始化默认标签页
-  const [tabs, setTabs] = useState<Tab[]>([
-    { id: Date.now().toString(), url: '/resume.html', title: '我的简历' },
-    { id: (Date.now() + 1).toString(), url: '/project/index.html', title: 'ChatBI 项目' },
-    { id: (Date.now() + 2).toString(), url: 'coming-soon', title: '我的网站' },
-  ]);
-  const [activeTabId, setActiveTabId] = useState<string>(tabs[0].id); // 默认激活"我的简历"
+  const initialTab: Tab = {
+    id: Date.now().toString(),
+    url: '/resume.html',
+    title: '关于我',
+    history: ['/resume.html'],
+    historyIndex: 0,
+  };
+  const [tabs, setTabs] = useState<Tab[]>([initialTab]);
+  const [activeTabId, setActiveTabId] = useState<string>(initialTab.id); // 默认激活"关于我"
   const [theme] = useTheme();
   const iframeRefs = useRef<Map<string, HTMLIFrameElement>>(new Map());
-
-  // 获取当前激活的标签页
-  const activeTab = tabs.find((tab) => tab.id === activeTabId) || tabs[0];
+  const [showBookmarksMenu, setShowBookmarksMenu] = useState(false);
 
   // 通知iframe主题变化的函数
   const notifyIframeTheme = useCallback((iframe: HTMLIFrameElement | null) => {
@@ -55,11 +77,88 @@ const Safari = () => {
         id: Date.now().toString(),
         url,
         title: title || '',
+        history: [url],
+        historyIndex: 0,
       };
       setActiveTabId(newTab.id);
       return [...currentTabs, newTab];
     });
   }, []);
+
+  // 更新标签页历史记录
+  const updateTabHistory = useCallback((tabId: string, newUrl: string) => {
+    setTabs((currentTabs) => {
+      return currentTabs.map((tab) => {
+        if (tab.id === tabId) {
+          // 如果新 URL 与当前 URL 相同，不更新历史
+          if (tab.url === newUrl) {
+            return tab;
+          }
+          // 移除当前索引之后的历史记录（如果有）
+          const newHistory = tab.history.slice(0, tab.historyIndex + 1);
+          // 添加新 URL
+          newHistory.push(newUrl);
+          return {
+            ...tab,
+            url: newUrl,
+            history: newHistory,
+            historyIndex: newHistory.length - 1,
+          };
+        }
+        return tab;
+      });
+    });
+  }, []);
+
+  // 前进
+  const goForward = useCallback(() => {
+    const activeTab = tabs.find((tab) => tab.id === activeTabId);
+    if (activeTab && activeTab.historyIndex < activeTab.history.length - 1) {
+      const newIndex = activeTab.historyIndex + 1;
+      const newUrl = activeTab.history[newIndex];
+      setTabs((currentTabs) =>
+        currentTabs.map((tab) =>
+          tab.id === activeTabId
+            ? { ...tab, url: newUrl, historyIndex: newIndex }
+            : tab
+        )
+      );
+      // 刷新 iframe
+      const iframe = iframeRefs.current.get(activeTabId);
+      if (iframe) {
+        iframe.src = `${newUrl}${newUrl.includes('?') ? '&' : '?'}theme=${theme}`;
+      }
+    }
+  }, [tabs, activeTabId, theme]);
+
+  // 后退
+  const goBack = useCallback(() => {
+    const activeTab = tabs.find((tab) => tab.id === activeTabId);
+    if (activeTab && activeTab.historyIndex > 0) {
+      const newIndex = activeTab.historyIndex - 1;
+      const newUrl = activeTab.history[newIndex];
+      setTabs((currentTabs) =>
+        currentTabs.map((tab) =>
+          tab.id === activeTabId
+            ? { ...tab, url: newUrl, historyIndex: newIndex }
+            : tab
+        )
+      );
+      // 刷新 iframe
+      const iframe = iframeRefs.current.get(activeTabId);
+      if (iframe) {
+        iframe.src = `${newUrl}${newUrl.includes('?') ? '&' : '?'}theme=${theme}`;
+      }
+    }
+  }, [tabs, activeTabId, theme]);
+
+  // 刷新
+  const refresh = useCallback(() => {
+    const iframe = iframeRefs.current.get(activeTabId);
+    if (iframe) {
+      iframe.src = iframe.src; // 重新加载
+    }
+  }, [activeTabId]);
 
   // 监听来自iframe的消息（用于打开新标签页）
   useEffect(() => {
@@ -77,6 +176,23 @@ const Safari = () => {
       window.removeEventListener('message', handleMessage);
     };
   }, [openOrSwitchToTab]);
+
+  // 点击外部关闭书签菜单
+  useEffect(() => {
+    if (!showBookmarksMenu) return;
+
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as HTMLElement;
+      if (!target.closest(`.${css.bookmarkContainer}`)) {
+        setShowBookmarksMenu(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [showBookmarksMenu]);
 
   // 切换标签页
   const switchTab = useCallback((tabId: string, e?: any) => {
@@ -105,7 +221,9 @@ const Safari = () => {
         const newTab: Tab = {
           id: Date.now().toString(),
           url: '/resume.html',
-          title: '我的简历',
+          title: '关于我',
+          history: ['/resume.html'],
+          historyIndex: 0,
         };
         setTabs([newTab]);
         setActiveTabId(newTab.id);
@@ -138,8 +256,13 @@ const Safari = () => {
     return fileName.replace('.html', '');
   };
 
+  const activeTab = tabs.find((tab) => tab.id === activeTabId) || tabs[0];
+  const canGoBack = activeTab.historyIndex > 0;
+  const canGoForward = activeTab.historyIndex < activeTab.history.length - 1;
+
   return (
     <section className={css.container}>
+      {/* 标签页栏 - 位于窗口顶部 */}
       <div className={clsx('app-window-drag-handle', css.tabsBar)}>
         {tabs.map((tab) => (
           <div
@@ -157,6 +280,72 @@ const Safari = () => {
             </button>
           </div>
         ))}
+      </div>
+      {/* 地址栏 */}
+      <div className={css.addressBar}>
+        <div className={css.navButtons}>
+          <button
+            className={css.navButton}
+            onClick={goBack}
+            disabled={!canGoBack}
+            aria-label="后退"
+            title="后退"
+          >
+            ←
+          </button>
+          <button
+            className={css.navButton}
+            onClick={goForward}
+            disabled={!canGoForward}
+            aria-label="前进"
+            title="前进"
+          >
+            →
+          </button>
+          <button
+            className={css.navButton}
+            onClick={refresh}
+            aria-label="刷新"
+            title="刷新"
+          >
+            ↻
+          </button>
+        </div>
+        <div className={css.addressInputContainer}>
+          <input
+            type="text"
+            className={css.addressInput}
+            value={getDisplayUrl(activeTab.url)}
+            readOnly
+            aria-label="地址栏"
+          />
+        </div>
+        <div className={css.bookmarkContainer}>
+          <button
+            className={css.bookmarkButton}
+            onClick={() => setShowBookmarksMenu(!showBookmarksMenu)}
+            aria-label="书签"
+            title="书签"
+          >
+            <AppIcon path={mdiBookmarkOutline} size={16} />
+          </button>
+          {showBookmarksMenu && (
+            <div className={css.bookmarkMenu}>
+              {bookmarks.map((bookmark) => (
+                <button
+                  key={bookmark.url}
+                  className={css.bookmarkItem}
+                  onClick={() => {
+                    openOrSwitchToTab(bookmark.url, bookmark.title);
+                    setShowBookmarksMenu(false);
+                  }}
+                >
+                  <span className={css.bookmarkTitle}>{bookmark.title}</span>
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
       </div>
       <div className={css.content}>
         <div className={css.placeholderText}>Coming Soon！</div>
