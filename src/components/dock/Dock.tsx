@@ -12,7 +12,6 @@ const dockAppIDs: Array<keyof typeof appsConfig> = [
   'safari',
   'talk-to-4x',
   'mail',
-  'system-preferences',
 ];
 
 export const Dock = () => {

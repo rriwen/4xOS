@@ -93,9 +93,11 @@ export const Window = ({ appID }: WindowProps) => {
         >
           <TrafficLights appID={appID} onMaximizeClick={toggleMaximize} onActivate={focusWindow} />
         </div>
-        <div className={clsx(css.titleBar, 'app-window-drag-handle')}>
-          <span className={css.title}>{appsConfig[appID].title}</span>
-        </div>
+        {appID !== 'safari' && (
+          <div className={clsx(css.titleBar, 'app-window-drag-handle')}>
+            <span className={css.title}>{appsConfig[appID].title}</span>
+          </div>
+        )}
         <Suspense fallback={<span></span>}>
           <AppNexus appID={appID} isBeingDragged={isBeingDragged} />
         </Suspense>
