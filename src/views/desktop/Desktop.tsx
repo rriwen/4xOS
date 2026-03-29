@@ -1,6 +1,7 @@
 import { useAtom } from 'jotai';
 import { useImmerAtom } from 'jotai-immer';
 import { lazy, Suspense, useEffect, useRef, useState } from 'react';
+import { Analytics } from '@vercel/analytics/react';
 import { ContextMenu } from '__/components/Desktop/ContextMenu/ContextMenu';
 import { StartupChime } from '__/components/Desktop/StartupChime';
 import { WindowsArea } from '__/components/Desktop/Window/WindowsArea';
@@ -104,6 +105,8 @@ export const Desktop = () => {
         aria-hidden="true"
         style={{ opacity: wallpaperLoaded ? 1 : 0 }}
       />
+      
+      <Analytics />
     </div>
   );
 };
